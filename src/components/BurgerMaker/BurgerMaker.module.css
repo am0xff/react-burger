@@ -1,0 +1,39 @@
+.maker {
+  height: calc(100vh - 128px); /* 88 = header and 40 = bottom offset */
+  display: flex;
+  flex-direction: column;
+}
+
+.makerBody {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 104px - 100px); /* 104 = footer and 100 = top offset */
+}
+
+.makerDisplayList {
+  margin: 16px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: scroll;
+}
+
+.makerDisplayItem {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.makerDisplayItemIcon {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translate(-12px, -50%)
+}
+
+.makerFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

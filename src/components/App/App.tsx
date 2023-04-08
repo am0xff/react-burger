@@ -1,6 +1,6 @@
 import React from 'react';
-import AppHeader from './components/AppHeader/AppHeader';
-import BurgerLayout from './components/BurgerLayout/BurgerLayout';
+import AppHeader from '../AppHeader/AppHeader';
+import BurgerLayout from '../BurgerLayout/BurgerLayout';
 
 function App() {
   return (

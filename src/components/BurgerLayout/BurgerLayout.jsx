@@ -1,17 +1,28 @@
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerMaker from '../BurgerMaker/BurgerMaker';
+import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import classes from './BurgerLayout.module.css';
+import { data } from '../../utils/data';
 
 const BurgerLayout = () => {
+  const ingredients = data.reduce((acc, product) => {
+    const type = product.type;
+
+    return {...acc, [product.type]: acc[type] ? [...acc[type], product] : [product]}
+  }, {});
+  
   return (
     <main>
       <div className={classes.container}>
         <div className={classes.row}>
           <div className={classes.col}>
-            <BurgerIngredients />
+            <BurgerIngredients  
+              bunList={ingredients.bun} 
+              mainList={ingredients.main} 
+              sauceList={ingredients.sauce} 
+            />
           </div>
           <div className={classes.col}>
-            <BurgerMaker />
+            <BurgerConstructor />
           </div>
         </div>
       </div>

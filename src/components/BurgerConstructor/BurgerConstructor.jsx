@@ -4,72 +4,88 @@ import {
   CurrencyIcon,
   DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import classes from './BurgerMaker.module.css';
+import classes from './BurgerConstructor.module.css';
 
-const BurgerMaker = () => {
+const ConstructorIngredient = ({ 
+  thumbnail, 
+  text, 
+  price, 
+  isLocked = false, 
+  type = '',
+  isDraggable
+}) => {
   return (
-    <section className={`${classes.maker} pr-4 pl-4`}>
-      <div className={`${classes.makerBody} pl-8 pt-25`}>
-        <ConstructorElement
+    <div className={classes.constructorIngredient}>
+      {isDraggable && (
+        <div className={classes.constructorIngredientIcon}>
+          <DragIcon />
+        </div>
+      )}
+      <ConstructorElement
+        type={type}
+        text={text}
+        isLocked={isLocked}
+        price={price}
+        thumbnail={thumbnail}
+      />
+    </div>
+  )
+}
+
+const BurgerConstructor = () => {
+  return (
+    <section className={`${classes.section} pr-4 pl-4`}>
+      <div className={`${classes.constructorBody} pl-8 pt-25`}>
+        <ConstructorIngredient 
           type="top"
           isLocked={true}
           text="Краторная булка N-200i (верх)"
           price={200}
           thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
         />
-        <ul className={`${classes.makerDisplayList}`}>
-          <li className={`${classes.makerDisplayItem}`}>
-            <div className={classes.makerDisplayItemIcon}>
-              <DragIcon />  
-            </div>
-            <ConstructorElement
+        <ul className={`${classes.constructorList}`}>
+          <li className={`${classes.constructorItem}`}>
+            <ConstructorIngredient 
+              isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
               thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
             />
           </li>
-          <li className={`${classes.makerDisplayItem}`}>
-            <div className={classes.makerDisplayItemIcon}>
-              <DragIcon />  
-            </div>
-            <ConstructorElement
+          <li className={`${classes.constructorItem}`}>
+            <ConstructorIngredient 
+              isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
               thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
             />
           </li>
-          <li className={`${classes.makerDisplayItem}`}>
-            <div className={classes.makerDisplayItemIcon}>
-              <DragIcon />  
-            </div>
-            <ConstructorElement
+          <li className={`${classes.constructorItem}`}>
+            <ConstructorIngredient 
+              isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
               thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
             />
           </li>
-          <li className={`${classes.makerDisplayItem}`}>
-            <div className={classes.makerDisplayItemIcon}>
-              <DragIcon />  
-            </div>
-            <ConstructorElement
+          <li className={`${classes.constructorItem}`}>
+            <ConstructorIngredient 
+              isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
               thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
             />
           </li>
-          <li className={`${classes.makerDisplayItem}`}>
-            <div className={classes.makerDisplayItemIcon}>
-              <DragIcon />  
-            </div>
-            <ConstructorElement
+          <li className={`${classes.constructorItem}`}>
+            <ConstructorIngredient 
+              isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
               thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
             />
           </li>
         </ul>
-        <ConstructorElement
+        <ConstructorIngredient 
           type="bottom"
           isLocked={true}
           text="Краторная булка N-200i (низ)"
@@ -77,7 +93,7 @@ const BurgerMaker = () => {
           thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
         />
       </div>
-      <footer className={`${classes.makerFooter} mt-10`}>
+      <footer className={`${classes.constructorFooter} mt-10`}>
         <p className="text text_type_digits-medium mr-10">
           <span className='mr-2'>610</span>
           <CurrencyIcon className='ml-2' />
@@ -90,4 +106,4 @@ const BurgerMaker = () => {
   )
 }
 
-export default BurgerMaker;
+export default BurgerConstructor;

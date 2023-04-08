@@ -21,9 +21,13 @@
   margin: 0;
 }
 
-.ingredient {
+.ingredientItem {
   width: calc(50% - 12px);
   text-align: center;
+}
+
+.ingredient {
+  cursor: pointer;
 }
 
 .ingredientImage {

@@ -1,9 +1,13 @@
+import { useCallback, useState } from 'react';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from '../Modal/Modal';
+import useModal from '../Modal/useModal';
+import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import classes from './BurgerIngredients.module.css';
 
-const Ingredient = ({ image, price, name }) => {
+const Ingredient = ({ image, price, name, onClick }) => {
   return (
-    <>
+    <div className={classes.ingredient} onClick={onClick}>
       <div className={`${classes.ingredientImage} pl-4 pr-4`}>
         <Counter count={1} size="default" extraClass="m-1" />
         <img src={image} alt={name} />
@@ -14,11 +18,23 @@ const Ingredient = ({ image, price, name }) => {
       <p className='text text_type_main-default'>
         {name}
       </p>
-    </>
+    </div>
   )
 }
 
 const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
+  const { open, onOpen, onClose } = useModal();
+  const [details, setDetails] = useState();
+
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const handleClickIngredient = useCallback((product) => {
+    setDetails(product);
+    onOpen();
+  }, [onOpen])
+
   return (
     <section className={`${classes.ingredients} pb-10`}>
       <h2 className='text text_type_main-large pt-10 pb-5'>
@@ -41,11 +57,12 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         </h3>
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {bunList.map((product) => (
-            <li className={classes.ingredient}>
-              <Ingredient 
-                image={product.image} 
+            <li key={product._id} className={classes.ingredientItem}>
+              <Ingredient
+                image={product.image}
                 name={product.name}
                 price={product.price}
+                onClick={() => handleClickIngredient(product)}
               />
             </li>
           ))}
@@ -55,11 +72,12 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         </h3>
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {mainList.map((product) => (
-            <li className={classes.ingredient}>
-              <Ingredient 
+            <li key={product._id} className={classes.ingredientItem}>
+              <Ingredient
                 image={product.image} 
                 name={product.name}
                 price={product.price}
+                onClick={() => handleClickIngredient(product)}
               />
             </li>
           ))}
@@ -69,16 +87,29 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         </h3>
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {sauceList.map((product) => (
-            <li className={classes.ingredient}>
-              <Ingredient 
+            <li key={product._id} className={classes.ingredientItem}>
+              <Ingredient
                 image={product.image} 
                 name={product.name}
                 price={product.price}
+                onClick={() => handleClickIngredient(product)}
               />
             </li>
           ))}
         </ul>
       </div>
+      { open && (
+        <Modal heading='Детали ингредиента' onClose={handleClose}>
+          <IngredientDetails  
+            image={details.image_large}
+            name={details.name}
+            proteins={details.proteins}
+            fat={details.fat}
+            carbohydrates={details.carbohydrates}
+            calories={details.calories}
+          />
+        </Modal>
+      ) }
     </section>
   )
 }

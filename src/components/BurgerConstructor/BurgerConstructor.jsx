@@ -4,6 +4,9 @@ import {
   CurrencyIcon,
   DragIcon
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import Modal from '../Modal/Modal';
+import useModal from '../Modal/useModal';
+import OrderDetails from '../OrderDetails/OrderDetails';
 import classes from './BurgerConstructor.module.css';
 
 const ConstructorIngredient = ({ 
@@ -33,6 +36,8 @@ const ConstructorIngredient = ({
 }
 
 const BurgerConstructor = () => {
+  const { open, onOpen, onClose } = useModal();
+
   return (
     <section className={`${classes.section} pr-4 pl-4`}>
       <div className={`${classes.constructorBody} pl-8 pt-25`}>
@@ -98,10 +103,20 @@ const BurgerConstructor = () => {
           <span className='mr-2'>610</span>
           <CurrencyIcon className='ml-2' />
         </p>
-        <Button htmlType="button" type="primary" size="large">
+        <Button 
+          htmlType="button" 
+          type="primary" 
+          size="large"
+          onClick={onOpen}
+        >
           Нажми на меня
         </Button>
       </footer>
+      {open && (
+        <Modal onClose={onClose}>
+          <OrderDetails />
+        </Modal>
+      )}
     </section>
   )
 }

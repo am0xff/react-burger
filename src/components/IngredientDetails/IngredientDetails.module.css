@@ -1,0 +1,28 @@
+.details {
+  padding: 0 60px 20px 60px;
+}
+
+.detailsImage {
+  display: flex;
+  padding: 0 20px;
+}
+
+.detailsName {
+  text-align: center;
+}
+
+.detailsList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+}
+
+.detailsItem {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

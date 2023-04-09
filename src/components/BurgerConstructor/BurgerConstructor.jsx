@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { 
   ConstructorElement, 
   Button, 
@@ -10,12 +11,12 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 import classes from './BurgerConstructor.module.css';
 
 const ConstructorIngredient = ({ 
-  thumbnail, 
-  text, 
-  price, 
-  isLocked = false, 
+  isDraggable,
   type = '',
-  isDraggable
+  text,
+  price,
+  isLocked = false,
+  thumbnail
 }) => {
   return (
     <div className={classes.constructorIngredient}>
@@ -27,12 +28,21 @@ const ConstructorIngredient = ({
       <ConstructorElement
         type={type}
         text={text}
-        isLocked={isLocked}
         price={price}
+        isLocked={isLocked}
         thumbnail={thumbnail}
       />
     </div>
   )
+}
+
+ConstructorIngredient.propTypes = {
+  isDraggable: PropTypes.bool,
+  type: PropTypes.oneOf(['top', 'bottom']),
+  text: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  isLocked: PropTypes.bool,
+  thumbnail: PropTypes.string.isRequired
 }
 
 const BurgerConstructor = () => {

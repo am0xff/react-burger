@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import classes from './OrderDetails.module.css';
 import doneImage from '../../images/done.png';
 
@@ -23,6 +24,10 @@ const OrderDetails = ({
       </p>
     </div>
   )
+}
+
+OrderDetails.propTypes = {
+  numberOrder: PropTypes.string.isRequired
 }
 
 export default OrderDetails;

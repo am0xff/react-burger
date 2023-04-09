@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import classes from './IngredientDetails.module.css';
 
 const InfoCard = ({ title, value }) => {
@@ -13,13 +14,18 @@ const InfoCard = ({ title, value }) => {
   )
 }
 
+InfoCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.number.isRequired
+}
+
 const IngredientDetails = ({ 
   image, 
-  name,  
+  name,
+  calories,
   proteins,
   fat,
-  carbohydrates,
-  calories
+  carbohydrates
 }) => {
   return (
     <div className={classes.details}>
@@ -45,6 +51,15 @@ const IngredientDetails = ({
       </ul>
     </div>
   )
+}
+
+IngredientDetails.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired, 
+  calories: PropTypes.number.isRequired,
+  proteins: PropTypes.number.isRequired,
+  fat: PropTypes.number.isRequired,
+  carbohydrates: PropTypes.number.isRequired
 }
 
 export default IngredientDetails;

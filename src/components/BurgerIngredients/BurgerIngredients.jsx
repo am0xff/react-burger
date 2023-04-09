@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
@@ -20,6 +21,13 @@ const Ingredient = ({ image, price, name, onClick }) => {
       </p>
     </div>
   )
+}
+
+Ingredient.propTypes = {
+  image: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
 }
 
 const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
@@ -112,6 +120,27 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
       ) }
     </section>
   )
+}
+
+const ProductPropTypes = PropTypes.shape({
+  _id: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.oneOf(['bun', 'main', 'sauce']),
+  proteins: PropTypes.number,
+  fat: PropTypes.number,
+  carbohydrates: PropTypes.number,
+  calories: PropTypes.number,
+  price: PropTypes.number,
+  image: PropTypes.string,
+  image_mobile: PropTypes.string,
+  image_large: PropTypes.string,
+  __v: PropTypes.number
+});
+
+BurgerIngredients.propTypes = {
+  bunList: PropTypes.arrayOf(ProductPropTypes),
+  mainList: PropTypes.arrayOf(ProductPropTypes), 
+  sauceList: PropTypes.arrayOf(ProductPropTypes)
 }
 
 export default BurgerIngredients;

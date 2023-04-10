@@ -1,49 +1,9 @@
-import PropTypes from 'prop-types';
-import { 
-  ConstructorElement, 
-  Button, 
-  CurrencyIcon,
-  DragIcon
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
 import OrderDetails from '../OrderDetails/OrderDetails';
+import BurgerConstructorIngredient from './BurgerConstructorIngredient';
 import classes from './BurgerConstructor.module.css';
-
-const ConstructorIngredient = ({ 
-  isDraggable,
-  type = '',
-  text,
-  price,
-  isLocked = false,
-  thumbnail
-}) => {
-  return (
-    <div className={classes.constructorIngredient}>
-      {isDraggable && (
-        <div className={classes.constructorIngredientIcon}>
-          <DragIcon />
-        </div>
-      )}
-      <ConstructorElement
-        type={type}
-        text={text}
-        price={price}
-        isLocked={isLocked}
-        thumbnail={thumbnail}
-      />
-    </div>
-  )
-}
-
-ConstructorIngredient.propTypes = {
-  isDraggable: PropTypes.bool,
-  type: PropTypes.oneOf(['top', 'bottom']),
-  text: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  isLocked: PropTypes.bool,
-  thumbnail: PropTypes.string.isRequired
-}
 
 const BurgerConstructor = () => {
   const { open, onOpen, onClose } = useModal();
@@ -51,7 +11,7 @@ const BurgerConstructor = () => {
   return (
     <section className={`${classes.section} pr-4 pl-4`}>
       <div className={`${classes.constructorBody} pl-8 pt-25`}>
-        <ConstructorIngredient 
+        <BurgerConstructorIngredient 
           type="top"
           isLocked={true}
           text="Краторная булка N-200i (верх)"
@@ -60,7 +20,7 @@ const BurgerConstructor = () => {
         />
         <ul className={`${classes.constructorList}`}>
           <li className={`${classes.constructorItem}`}>
-            <ConstructorIngredient 
+            <BurgerConstructorIngredient 
               isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
@@ -68,7 +28,7 @@ const BurgerConstructor = () => {
             />
           </li>
           <li className={`${classes.constructorItem}`}>
-            <ConstructorIngredient 
+            <BurgerConstructorIngredient 
               isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
@@ -76,7 +36,7 @@ const BurgerConstructor = () => {
             />
           </li>
           <li className={`${classes.constructorItem}`}>
-            <ConstructorIngredient 
+            <BurgerConstructorIngredient 
               isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
@@ -84,7 +44,7 @@ const BurgerConstructor = () => {
             />
           </li>
           <li className={`${classes.constructorItem}`}>
-            <ConstructorIngredient 
+            <BurgerConstructorIngredient 
               isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
@@ -92,7 +52,7 @@ const BurgerConstructor = () => {
             />
           </li>
           <li className={`${classes.constructorItem}`}>
-            <ConstructorIngredient 
+            <BurgerConstructorIngredient 
               isDraggable={true}
               text="Краторная булка N-200i (верх)"
               price={50}
@@ -100,7 +60,7 @@ const BurgerConstructor = () => {
             />
           </li>
         </ul>
-        <ConstructorIngredient 
+        <BurgerConstructorIngredient 
           type="bottom"
           isLocked={true}
           text="Краторная булка N-200i (низ)"

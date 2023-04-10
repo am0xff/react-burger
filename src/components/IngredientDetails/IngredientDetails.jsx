@@ -1,23 +1,6 @@
 import PropTypes from 'prop-types';
+import IngredientDetailsInfoCard from './IngredientDetailsInfoCard';
 import classes from './IngredientDetails.module.css';
-
-const InfoCard = ({ title, value }) => {
-  return (
-    <>
-      <p className="text text_type_main-default text_color_inactive">
-        {title}
-      </p>
-      <p className="text text_type_digits-default text_color_inactive">
-        {value}
-      </p>
-    </>
-  )
-}
-
-InfoCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired
-}
 
 const IngredientDetails = ({ 
   image, 
@@ -37,16 +20,16 @@ const IngredientDetails = ({
       </p>
       <ul className={classes.detailsList}>
         <li className={classes.detailsItem}>
-          <InfoCard title={'Калории,ккал'} value={calories} />
+          <IngredientDetailsInfoCard title={'Калории,ккал'} value={calories} />
         </li>
         <li className={classes.detailsItem}>
-          <InfoCard title={'Белки, г'} value={proteins} />
+          <IngredientDetailsInfoCard title={'Белки, г'} value={proteins} />
         </li>
         <li className={classes.detailsItem}>
-          <InfoCard title={'Жиры, г'} value={fat} />
+          <IngredientDetailsInfoCard title={'Жиры, г'} value={fat} />
         </li>
         <li className={classes.detailsItem}>
-          <InfoCard title={'Углеводы, г'} value={carbohydrates} />
+          <IngredientDetailsInfoCard title={'Углеводы, г'} value={carbohydrates} />
         </li>
       </ul>
     </div>

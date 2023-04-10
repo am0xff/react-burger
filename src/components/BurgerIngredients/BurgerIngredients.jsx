@@ -1,34 +1,12 @@
-import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
-import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import { Tab,  } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
+import BurgerIngredientsIngredient from './BurgerIngredientsIngredient';
+import { ProductPropTypes } from '../../utils/types';
 import classes from './BurgerIngredients.module.css';
-
-const Ingredient = ({ image, price, name, onClick }) => {
-  return (
-    <div className={classes.ingredient} onClick={onClick}>
-      <div className={`${classes.ingredientImage} pl-4 pr-4`}>
-        <Counter count={1} size="default" extraClass="m-1" />
-        <img src={image} alt={name} />
-      </div>
-      <p className={`${classes.ingredientPrice} text text_type_digits-default mt-1 mb-1`}>
-        {price} <CurrencyIcon className='ml-2' />
-      </p>
-      <p className='text text_type_main-default'>
-        {name}
-      </p>
-    </div>
-  )
-}
-
-Ingredient.propTypes = {
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired
-}
 
 const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
   const { open, onOpen, onClose } = useModal();
@@ -66,7 +44,7 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {bunList.map((product) => (
             <li key={product._id} className={classes.ingredientItem}>
-              <Ingredient
+              <BurgerIngredientsIngredient
                 image={product.image}
                 name={product.name}
                 price={product.price}
@@ -81,7 +59,7 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {mainList.map((product) => (
             <li key={product._id} className={classes.ingredientItem}>
-              <Ingredient
+              <BurgerIngredientsIngredient
                 image={product.image} 
                 name={product.name}
                 price={product.price}
@@ -96,7 +74,7 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
         <ul className={`${classes.ingredientsList} pl-4 pr-4`}>
           {sauceList.map((product) => (
             <li key={product._id} className={classes.ingredientItem}>
-              <Ingredient
+              <BurgerIngredientsIngredient
                 image={product.image} 
                 name={product.name}
                 price={product.price}
@@ -121,21 +99,6 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
     </section>
   )
 }
-
-const ProductPropTypes = PropTypes.shape({
-  _id: PropTypes.string,
-  name: PropTypes.string,
-  type: PropTypes.oneOf(['bun', 'main', 'sauce']),
-  proteins: PropTypes.number,
-  fat: PropTypes.number,
-  carbohydrates: PropTypes.number,
-  calories: PropTypes.number,
-  price: PropTypes.number,
-  image: PropTypes.string,
-  image_mobile: PropTypes.string,
-  image_large: PropTypes.string,
-  __v: PropTypes.number
-});
 
 BurgerIngredients.propTypes = {
   bunList: PropTypes.arrayOf(ProductPropTypes),

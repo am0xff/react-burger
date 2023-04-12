@@ -1,0 +1,51 @@
+.ingredients {
+  max-width: 600px;
+  height: calc(100vh - 128px);
+  display: flex;
+  flex-direction: column;
+}
+
+.ingredientsTabs {
+  display: flex;
+}
+
+.ingredientsBody {
+  overflow-y: scroll;
+}
+
+.ingredientsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+}
+
+.ingredientItem {
+  width: calc(50% - 12px);
+  text-align: center;
+}
+
+.ingredient {
+  cursor: pointer;
+}
+
+.ingredientImage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredientImage > img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.ingredientPrice {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}

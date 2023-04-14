@@ -8,7 +8,8 @@ const BurgerConstructorIngredient = ({
   text,
   price,
   isLocked = false,
-  thumbnail
+  thumbnail,
+  onDelete
 }) => {
   return (
     <div className={classes.constructorIngredient}>
@@ -23,6 +24,7 @@ const BurgerConstructorIngredient = ({
         price={price}
         isLocked={isLocked}
         thumbnail={thumbnail}
+        handleClose={onDelete}
       />
     </div>
   )
@@ -34,7 +36,8 @@ BurgerConstructorIngredient.propTypes = {
   text: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   isLocked: PropTypes.bool,
-  thumbnail: PropTypes.string.isRequired
+  thumbnail: PropTypes.string.isRequired,
+  onDelete: PropTypes.func
 }
 
 export default BurgerConstructorIngredient;

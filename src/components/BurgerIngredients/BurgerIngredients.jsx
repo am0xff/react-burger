@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Tab,  } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
@@ -6,9 +6,11 @@ import useModal from '../Modal/useModal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import BurgerIngredientsIngredient from './BurgerIngredientsIngredient';
 import { ProductPropTypes } from '../../utils/types';
+import { ConstructorContext } from '../../services/constructorContext';
 import classes from './BurgerIngredients.module.css';
 
 const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
+  const { constructorDispatcher } = useContext(ConstructorContext);
   const { open, onOpen, onClose } = useModal();
   const [details, setDetails] = useState();
 
@@ -17,9 +19,10 @@ const BurgerIngredients = ({ bunList, mainList, sauceList }) => {
   }, [onClose]);
 
   const handleClickIngredient = useCallback((product) => {
+    constructorDispatcher({ type: 'add', payload: product });
     setDetails(product);
     onOpen();
-  }, [onOpen])
+  }, [constructorDispatcher, onOpen])
 
   return (
     <section className={`${classes.ingredients} pb-10`}>

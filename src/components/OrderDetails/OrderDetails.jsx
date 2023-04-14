@@ -2,13 +2,21 @@ import PropTypes from 'prop-types';
 import classes from './OrderDetails.module.css';
 import doneImage from '../../images/done.png';
 
-const OrderDetails = ({ 
-  numberOrder = '034536',
-}) => {
+const OrderDetails = ({ details }) => {
+  const { order, success } = details;
+
+  if(!success) {
+    <div className={`${classes.details} pt-20 pb-20`}>
+      <p className={`${classes.detailsNumber} text text_type_digits-large`}>
+        Ошибка
+      </p>
+    </div>
+  }
+
   return (
     <div className={`${classes.details} pt-20 pb-20`}>
       <p className={`${classes.detailsNumber} text text_type_digits-large`}>
-        {numberOrder}
+        {order.number}
       </p>
       <p className='text text_type_main-medium mt-8'>
         идентификатор заказа
@@ -27,7 +35,13 @@ const OrderDetails = ({
 }
 
 OrderDetails.propTypes = {
-  numberOrder: PropTypes.string.isRequired
+  details: PropTypes.shape({
+    name: PropTypes.string,
+    order: PropTypes.shape({
+      number: PropTypes.number
+    }),
+    success: PropTypes.bool
+  })
 }
 
 export default OrderDetails;

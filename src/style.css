@@ -1,0 +1,13 @@
+/* Custom scrollbar :: start */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2F2F37;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8585AD;
+}
+/* Custom scrollbar :: end */

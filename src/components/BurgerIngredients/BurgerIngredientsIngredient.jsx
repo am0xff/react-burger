@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import classes from './BurgerIngredients.module.css';
 
-const BurgerIngredientsIngredient = ({ id, image, price, name, count, onClick }, ref) => {
+const BurgerIngredientsIngredient = ({ id, image, price, name, count, onClick }) => {
   const [{ isDragging }, dragRef] = useDrag({
       type: 'ingredient',
       item: { id },
@@ -38,6 +38,7 @@ BurgerIngredientsIngredient.propTypes = {
   id: PropTypes.string,
   image: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
+  count: PropTypes.number,
   name: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 }

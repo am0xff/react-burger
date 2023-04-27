@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-
 import Modal from '../Modal/Modal';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import { ProductPropTypes } from '../../utils/types';
-import { DELETE_INGREDIENT_DETAILS, CLOSE_DETAILS_MODAL } from '../../services/actions';
+import { DELETE_INGREDIENT_DETAILS, CLOSE_DETAILS_MODAL } from '../../services/actions/ingredientDetails';
 import { TYPE_INGREDIENT } from '../../utils/constants';
 import BurgerIngredientsSection from './BurgerIngredientsSection';
 import classes from './BurgerIngredients.module.css';
@@ -15,23 +12,16 @@ const BurgerIngredients = () => {
   const [ref, setRef] = useState();
   const dispatch = useDispatch();
   const [tab, setTab] = useState(0);
-  const { 
-    ingredientDetails, 
-    ingredients, 
-    modalDetails, 
-    constructorList 
-  } = useSelector((state) => ({
-    ingredientDetails: state.order.ingredientDetails,
-    ingredients: state.order.ingredients,
-    modalDetails: state.order.modalDetails,
-    constructorList: state.order.constructorList
-  }));
+  const ingredientDetails = useSelector((state) => state.ingredient.details);
+  const ingredients = useSelector((state) => state.ingredients.items);
+  const modalDetails = useSelector((state) => state.ingredient.modal);
+  const constructorItems = useSelector((state) => state.burgerConstructor.items);
 
   const countByIdIngredients = useMemo(() => {
-    return constructorList.reduce((acc, {_id}) => {
+    return constructorItems.reduce((acc, {_id}) => {
       return acc[_id] ? {...acc, [_id]: acc[_id] + 1} : {...acc, [_id]: 1}
     }, {})
-  }, [constructorList]);
+  }, [constructorItems]);
 
   const bunListWithCount = useMemo(() => {
     return ingredients
@@ -60,10 +50,10 @@ const BurgerIngredients = () => {
       }));
   }, [countByIdIngredients, ingredients]);
 
-  const handleClose = useCallback(() => {
-    dispatch({ type: CLOSE_DETAILS_MODAL })
-    dispatch({ type: DELETE_INGREDIENT_DETAILS })
-  }, [dispatch]);
+  const handleClose = () => {
+    dispatch({ type: CLOSE_DETAILS_MODAL });
+    dispatch({ type: DELETE_INGREDIENT_DETAILS });
+  };
 
   const handleTab = (id) => {
     const section = ref.querySelector(`[data-section-id="${id}"]`);
@@ -125,12 +115,6 @@ const BurgerIngredients = () => {
       ) }
     </section>
   )
-}
-
-BurgerIngredients.propTypes = {
-  bunList: PropTypes.arrayOf(ProductPropTypes),
-  mainList: PropTypes.arrayOf(ProductPropTypes), 
-  sauceList: PropTypes.arrayOf(ProductPropTypes)
 }
 
 export default BurgerIngredients;

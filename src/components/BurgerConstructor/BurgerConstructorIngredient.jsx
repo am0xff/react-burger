@@ -1,22 +1,26 @@
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd'
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import { DELETE_ITEM } from '../../services/actions/burgerConstructor';
 import classes from './BurgerConstructor.module.css';
 
 const BurgerConstructorIngredient = ({ 
+  id,
   index,
-  moveCard,
+  changeOrder,
   isDraggable,
   type = '',
   text,
   price,
   isLocked = false,
-  thumbnail,
-  onDelete
+  thumbnail
 }) => {
   const ref = useRef(null);
-  const [{ handlerId }, drop] = useDrop({
+  const dispatch = useDispatch();
+  
+  const [_, drop] = useDrop({
     accept: 'test',
     collect(monitor) {
       return {
@@ -50,10 +54,11 @@ const BurgerConstructorIngredient = ({
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return
       }
-      moveCard(dragIndex, hoverIndex);
+      changeOrder(dragIndex, hoverIndex);
       item.index = hoverIndex
     },
-  })
+  });
+
   const [{ isDragging }, drag] = useDrag({
     type: 'test',
     item: () => {
@@ -63,11 +68,15 @@ const BurgerConstructorIngredient = ({
       isDragging: monitor.isDragging(),
     }),
   })
-  const opacity = isDragging ? 0 : 1
-  drag(drop(ref))
+  
+  drag(drop(ref));
+
+  const handleDelete = (id) => {
+    dispatch({ type: DELETE_ITEM, payload: id })
+  };
 
   return (
-    <div ref={ref} style={{ opacity }} className={classes.constructorIngredient}>
+    <div ref={ref} style={{ opacity: isDragging ? 0 : 1 }} className={classes.constructorIngredient}>
       {isDraggable && (
         <div className={classes.constructorIngredientIcon}>
           <DragIcon />
@@ -79,96 +88,22 @@ const BurgerConstructorIngredient = ({
         price={price}
         isLocked={isLocked}
         thumbnail={thumbnail}
-        handleClose={onDelete}
+        handleClose={() => handleDelete(id)}
       />
     </div>
   )
 };
 
 BurgerConstructorIngredient.propTypes = {
+  id: PropTypes.string,
+  index: PropTypes.number,
+  changeOrder: PropTypes.func,
   isDraggable: PropTypes.bool,
   type: PropTypes.oneOf(['top', 'bottom']),
   text: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   isLocked: PropTypes.bool,
-  thumbnail: PropTypes.string.isRequired,
-  onDelete: PropTypes.func
+  thumbnail: PropTypes.string.isRequired
 }
 
 export default BurgerConstructorIngredient;
-
-// import { useRef } from 'react'
-// import { useDrag, useDrop } from 'react-dnd'
-// import { ItemTypes } from './ItemTypes.js'
-// const style = {
-//   border: '1px dashed gray',
-//   padding: '0.5rem 1rem',
-//   marginBottom: '.5rem',
-//   backgroundColor: 'white',
-//   cursor: 'move',
-// }
-// export const Card = ({ id, text, index, moveCard }) => {
-//   const ref = useRef(null);
-//   const [{ handlerId }, drop] = useDrop({
-//     accept: ItemTypes.CARD,
-//     collect(monitor) {
-//       return {
-//         handlerId: monitor.getHandlerId(),
-//       }
-//     },
-//     hover(item, monitor) {
-//       if (!ref.current) {
-//         return
-//       }
-//       const dragIndex = item.index
-//       const hoverIndex = index
-//       // Don't replace items with themselves
-//       if (dragIndex === hoverIndex) {
-//         return
-//       }
-//       // Determine rectangle on screen
-//       const hoverBoundingRect = ref.current?.getBoundingClientRect()
-//       // Get vertical middle
-//       const hoverMiddleY =
-//         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-//       // Determine mouse position
-//       const clientOffset = monitor.getClientOffset()
-//       // Get pixels to the top
-//       const hoverClientY = clientOffset.y - hoverBoundingRect.top
-//       // Only perform the move when the mouse has crossed half of the items height
-//       // When dragging downwards, only move when the cursor is below 50%
-//       // When dragging upwards, only move when the cursor is above 50%
-//       // Dragging downwards
-//       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-//         return
-//       }
-//       // Dragging upwards
-//       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-//         return
-//       }
-//       // Time to actually perform the action
-//       moveCard(dragIndex, hoverIndex)
-//       // Note: we're mutating the monitor item here!
-//       // Generally it's better to avoid mutations,
-//       // but it's good here for the sake of performance
-//       // to avoid expensive index searches.
-//       item.index = hoverIndex
-//     },
-//   })
-//   const [{ isDragging }, drag] = useDrag({
-//     type: ItemTypes.CARD,
-//     item: () => {
-//       return { id, index }
-//     },
-//     collect: (monitor) => ({
-//       isDragging: monitor.isDragging(),
-//     }),
-//   })
-//   const opacity = isDragging ? 0 : 1
-//   drag(drop(ref))
-//   return (
-//     <div ref={ref} style={{ ...style, opacity }} data-handler-id={handlerId}>
-//       {text}
-//     </div>
-//   )
-// }

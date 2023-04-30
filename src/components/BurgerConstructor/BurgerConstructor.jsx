@@ -1,90 +1,107 @@
+import { useMemo } from 'react';
+import { useDrop } from 'react-dnd';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
 import OrderDetails from '../OrderDetails/OrderDetails';
+import { ADD_ITEM } from '../../services/actions/burgerConstructor';
+import { DELETE_ORDER_DETAILS, createOrder } from '../../services/actions/order';
+import { TYPE_INGREDIENT } from '../../utils/constants';
 import BurgerConstructorIngredient from './BurgerConstructorIngredient';
+import BurgerConstructorDraggable from './BurgerConstructorDraggable';
 import classes from './BurgerConstructor.module.css';
 
 const BurgerConstructor = () => {
-  const { open, onOpen, onClose } = useModal();
+  const dispatch = useDispatch();
+  const constructorItems = useSelector((state) => state.burgerConstructor.items);
+  const orderRequest = useSelector((state) => state.order.request);
+  const orderDetails = useSelector((state) => state.order.details);
+  const ingredients = useSelector((state) => state.ingredients.items);
+
+  const isEmpty = !constructorItems.length;
+
+  const { onClose } = useModal();
+  
+  const [_, dropRef] = useDrop({
+    accept: 'ingredient',
+    drop: ({ id }) => {
+
+      const ingredient = ingredients.find(({ _id }) => _id === id);
+
+      dispatch({ type: ADD_ITEM, payload: ingredient });
+    },
+    collect: (monitor) => ({
+        isOver: monitor.isOver()
+    })
+  });
+
+  const bun = useMemo(() => {
+    return constructorItems.find(({ type }) => type === TYPE_INGREDIENT.BUN);
+  }, [constructorItems]);
+
+  const constructorItemsWithoutBun = useMemo(() => {
+    return constructorItems.filter(({ type }) => type !== TYPE_INGREDIENT.BUN);
+  }, [constructorItems]);
+
+  const totalPrice = useMemo(() => {
+    const bunSum = (bun?.price || 0) * 2;
+    const ingredientsSum = constructorItemsWithoutBun.reduce((acc, cur) => acc + cur.price, 0);
+
+    return bunSum + ingredientsSum;
+  }, [bun?.price, constructorItemsWithoutBun]);
+
+  const handleCreateOrder = () => {
+    dispatch(createOrder([bun._id, ...constructorItemsWithoutBun.map(({_id}) => _id), bun._id]));
+  }
+
+  const handleCloseModal = () => {
+    onClose();
+    dispatch({ type: DELETE_ORDER_DETAILS });
+  }
 
   return (
-    <section className={`${classes.section} pr-4 pl-4`}>
-      <div className={`${classes.constructorBody} pl-8 pt-25`}>
-        <BurgerConstructorIngredient 
+    <section className={`${classes.section} pr-4 pl-4 pt-25`}>
+      <div ref={dropRef} className={`${classes.constructorBody} pl-8 ${isEmpty ? classes.empty : ''}`}>
+        {isEmpty && <p className='text text_type_main-large'>Добавьте ингредиенты</p>}
+        {bun && (
+          <BurgerConstructorIngredient 
           type="top"
           isLocked={true}
-          text="Краторная булка N-200i (верх)"
-          price={200}
-          thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
+          text={`${bun.name} (верх)`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
-        <ul className={`${classes.constructorList}`}>
-          <li className={`${classes.constructorItem}`}>
-            <BurgerConstructorIngredient 
-              isDraggable={true}
-              text="Краторная булка N-200i (верх)"
-              price={50}
-              thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-            />
-          </li>
-          <li className={`${classes.constructorItem}`}>
-            <BurgerConstructorIngredient 
-              isDraggable={true}
-              text="Краторная булка N-200i (верх)"
-              price={50}
-              thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-            />
-          </li>
-          <li className={`${classes.constructorItem}`}>
-            <BurgerConstructorIngredient 
-              isDraggable={true}
-              text="Краторная булка N-200i (верх)"
-              price={50}
-              thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-            />
-          </li>
-          <li className={`${classes.constructorItem}`}>
-            <BurgerConstructorIngredient 
-              isDraggable={true}
-              text="Краторная булка N-200i (верх)"
-              price={50}
-              thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-            />
-          </li>
-          <li className={`${classes.constructorItem}`}>
-            <BurgerConstructorIngredient 
-              isDraggable={true}
-              text="Краторная булка N-200i (верх)"
-              price={50}
-              thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-            />
-          </li>
-        </ul>
-        <BurgerConstructorIngredient 
-          type="bottom"
-          isLocked={true}
-          text="Краторная булка N-200i (низ)"
-          price={200}
-          thumbnail={'https://code.s3.yandex.net/react/code/bun-02.png'}
-        />
+        )}
+        <BurgerConstructorDraggable />
+        {bun && (
+          <BurgerConstructorIngredient 
+            type="bottom"
+            isLocked={true}
+            text={`${bun.name} (низ)`}
+            price={bun.price}
+            thumbnail={bun.image_mobile}
+          />
+        )}
       </div>
       <footer className={`${classes.constructorFooter} mt-10`}>
         <p className="text text_type_digits-medium mr-10">
-          <span className='mr-2'>610</span>
+          <span className='mr-2'>{totalPrice}</span>
           <CurrencyIcon className='ml-2' />
         </p>
         <Button 
           htmlType="button" 
           type="primary" 
           size="large"
-          onClick={onOpen}
+          disabled={orderRequest || !constructorItems.length}
+          onClick={handleCreateOrder}
         >
           Нажми на меня
         </Button>
       </footer>
-      {open && (
-        <Modal onClose={onClose}>
-          <OrderDetails />
+      {orderDetails && (
+        <Modal onClose={handleCloseModal}>
+          <OrderDetails details={orderDetails} />
         </Modal>
       )}
     </section>

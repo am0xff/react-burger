@@ -28,6 +28,7 @@
 }
 
 .constructorIngredient {
+  width: 100%;
   flex-grow: 0;
 }
 
@@ -42,4 +43,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.empty {
+ display: flex; 
+ align-items: center;
+ justify-content: center;
+ border: 1px solid #ffffff80;
 }

@@ -12,7 +12,6 @@
               0px 4px 8px rgba(0, 0, 0, 0.04), 
               0px 0px 1px rgba(0, 0, 0, 0.04);
   border-radius: 40px;
-  overflow: scroll;
   z-index: 999;
   box-sizing: border-box;
 }

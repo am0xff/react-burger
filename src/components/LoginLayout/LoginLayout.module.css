@@ -1,0 +1,25 @@
+.wrap {
+  padding: 120px 0;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.title {
+  text-align: center;
+}
+
+.buttonWrap {
+  display: flex;
+  justify-content: center;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.link {
+  color: #4C4CFF;
+  text-decoration: none;
+}

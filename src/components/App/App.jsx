@@ -1,21 +1,30 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getIngredients } from '../../services/actions/ingredients';
-import AppHeader from '../AppHeader/AppHeader';
-import BurgerLayout from '../BurgerLayout/BurgerLayout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  LoginPage, 
+  BurgerConstructorPage, 
+  ForgotPasswordPage,
+  RegisterPage,
+  ResetPasswordPage,
+  ProfilePage,
+  IngredientPage,
+  NotFound
+} from '../../pages';
+import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getIngredients())
-  }, [dispatch])
-
   return (
-    <>
-      <AppHeader />
-      <BurgerLayout />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<BurgerConstructorPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/profile" element={<ProtectedRouteElement element={<ProfilePage />} />} />
+        <Route path="/ingredients/:id" element={<IngredientPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

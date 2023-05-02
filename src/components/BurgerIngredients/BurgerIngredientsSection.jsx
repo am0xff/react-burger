@@ -59,7 +59,7 @@ const BurgerIngredientsSection = ({ id, title, items, setTab }) => {
 }
 
 BurgerIngredientsSection.propTypes = {
-  id: PropTypes.string,
+  id: PropTypes.number,
   title: PropTypes.string,
   items: PropTypes.arrayOf(ProductPropTypes),
   setTab: PropTypes.func

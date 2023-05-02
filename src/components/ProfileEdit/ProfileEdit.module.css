@@ -1,0 +1,8 @@
+.wrap {
+  max-width: 480px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}

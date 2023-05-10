@@ -1,11 +1,18 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRouteElement = ({ element }) => {
+const ProtectedRouteElement = ({ element, onlyUnAuth = false }) => {
   const token = localStorage.getItem('token');
+  const location = useLocation();
 
-  localStorage.setItem('url', window.location.href);
+  if (!token && !onlyUnAuth) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
 
-  return token ? element : <Navigate to="/login" replace />
+  if (token && onlyUnAuth) {
+    return <Navigate to="/" replace />
+  }
+
+  return element;
 }
 
 export default ProtectedRouteElement;

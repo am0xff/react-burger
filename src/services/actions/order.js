@@ -9,6 +9,12 @@ export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
 
 export const createOrder = (payload) => {
   return (dispatch) => {
+    const token = localStorage.getItem('token');
+
+    if(!token) {
+      // редирект на LOGIN
+    }
+
     dispatch({ type: CREATE_ORDER_REQUEST });
 
     fetch(CREATE_ORDER_API_URL, {

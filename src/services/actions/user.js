@@ -1,7 +1,38 @@
 export const SET_USER = 'SET_USER';
-export const REQUEST = 'REQUEST';
-export const SUCCESS = 'SUCCESS';
-export const FAILED = 'FAILED';
+
+export const REGISTER_REQUEST = 'REGISTER_REQUEST';
+export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+export const REGISTER_FAILED = 'REGISTER_FAILED';
+
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
+
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILED = 'LOGOUT_FAILED';
+
+export const GET_TOKEN_REQUEST = 'GET_TOKEN_REQUEST';
+export const GET_TOKEN_SUCCESS = 'GET_TOKEN_SUCCESS';
+export const GET_TOKEN_FAILED = 'GET_TOKEN_FAILED';
+
+export const GET_CODE_REQUEST = 'GET_CODE_REQUEST';
+export const GET_CODE_SUCCESS = 'GET_CODE_SUCCESS';
+export const GET_CODE_FAILED = 'GET_CODE_FAILED';
+
+export const CREATE_PASSWORD_REQUEST = 'CREATE_PASSWORD_REQUEST';
+export const CREATE_PASSWORD_SUCCESS = 'CREATE_PASSWORD_SUCCESS';
+export const CREATE_PASSWORD_FAILED = 'CREATE_PASSWORD_FAILED';
+
+export const GET_USER_REQUEST = 'GET_USER_REQUEST';
+export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
+export const GET_USER_FAILED = 'GET_USER_FAILED';
+
+export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST';
+export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_FAILED = 'UPDATE_PROFILE_FAILED';
+
+
 
 // payload is ->
 // {
@@ -21,6 +52,8 @@ export const FAILED = 'FAILED';
 // }
 export function register(payload) {
   return (dispatch) => {
+    dispatch({ type: REGISTER_REQUEST });
+
     fetch('https://norma.nomoreparties.space/api/auth/register', {
       method: 'POST',
       mode: 'cors',
@@ -36,18 +69,19 @@ export function register(payload) {
     .then(response => response.json())
     .then((data) => {
       if(!data.success) {
+        dispatch({ type: REGISTER_FAILED });
         throw new Error(data.message);
       }
 
       // SAVE TOKEN
-      // localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('token', data.accessToken);
       
       // SAVE REFRESH_TOKEN
-      // localStorage.setItem('refreshToken', data.refreshToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
 
-      // dispatch({ type: SET_USER, payload: data.user });
+      dispatch({ type: SET_USER, payload: data.user });
 
-      window.location.href = window.location.origin + '/login';
+      dispatch({ type: REGISTER_SUCCESS });
     });
   }
 }
@@ -69,6 +103,8 @@ export function register(payload) {
 // } 
 export function login(payload) {
   return (dispatch) => {
+    dispatch({ type: LOGIN_REQUEST });
+    
     fetch('https://norma.nomoreparties.space/api/auth/login', {
       method: 'POST',
       mode: 'cors',
@@ -84,6 +120,7 @@ export function login(payload) {
     .then(response => response.json())
     .then((data) => {
       if(!data.success) {
+        dispatch({ type: LOGIN_FAILED });
         throw new Error(data.message);
       }
 
@@ -94,8 +131,8 @@ export function login(payload) {
       localStorage.setItem('refreshToken', data.refreshToken);
 
       dispatch({ type: SET_USER, payload: data.user });
-      // redirect
-      window.location.href = localStorage.getItem('url') || window.location.origin + '/';
+
+      dispatch({ type: LOGIN_SUCCESS });
     });
   }
 }
@@ -112,6 +149,8 @@ export function login(payload) {
 // }
 export function logout(payload) {
   return (dispatch) => {
+    dispatch({ type: LOGOUT_REQUEST });
+
     fetch('https://norma.nomoreparties.space/api/auth/logout', {
       method: 'POST',
       mode: 'cors',
@@ -127,9 +166,10 @@ export function logout(payload) {
     .then(response => response.json())
     .then((data) => {
       if(!data.success) {
-        throw new Error(data.message);
+        dispatch({ type: LOGOUT_FAILED });
       }
 
+      dispatch({ type: LOGOUT_SUCCESS });
       localStorage.clear();
     });
   }
@@ -147,6 +187,10 @@ export function logout(payload) {
 // }
 export function getToken(payload) {
   return (dispatch) => {
+    dispatch({ type: GET_TOKEN_REQUEST });
+
+    const { token, callback } = payload;
+
     fetch('https://norma.nomoreparties.space/api/auth/token', {
       method: 'POST',
       mode: 'cors',
@@ -157,7 +201,7 @@ export function getToken(payload) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({token})
     })
     .then(response => response.json())
     .then((data) => {
@@ -170,13 +214,10 @@ export function getToken(payload) {
       
       // SAVE REFRESH_TOKEN
       localStorage.setItem('refreshToken', data.refreshToken);
-      
-      // redirect
-      window.location.href = localStorage.getItem('url') || window.location.origin + '/'
-    })
-    .catch(() => {
-      localStorage.clear();
-      window.location.href = window.location.origin + '/login';
+
+      dispatch({ type: GET_TOKEN_SUCCESS });
+
+      dispatch(callback());
     });
   }
 }
@@ -192,6 +233,8 @@ export function getToken(payload) {
 // }
 export function getCodeForReset(payload) {
   return (dispatch) => {
+    dispatch({ type: GET_CODE_REQUEST });
+
     fetch('https://norma.nomoreparties.space/api/password-reset', {
       method: 'POST',
       mode: 'cors',
@@ -207,10 +250,10 @@ export function getCodeForReset(payload) {
     .then((response) => response.json())
     .then((data) => {
       if (!data.success) {
-        throw new Error(data.message);
+        dispatch({ type: GET_CODE_FAILED });
       }
 
-      window.location.href = window.location.origin + '/reset-password'
+      dispatch({ type: GET_CODE_SUCCESS });
     })
   }
 }
@@ -227,6 +270,8 @@ export function getCodeForReset(payload) {
 // }
 export function createNewPassword(payload) {
   return (dispatch) => {
+    dispatch({ type: CREATE_PASSWORD_REQUEST });
+
     fetch('https://norma.nomoreparties.space/api/password-reset/reset', {
       method: 'POST',
       mode: 'cors',
@@ -242,10 +287,10 @@ export function createNewPassword(payload) {
     .then((response) => response.json())
     .then((data) => {
       if (!data.success) {
-        throw new Error(data.message);
+        dispatch({ type: CREATE_PASSWORD_FAILED });
       }
 
-      window.location.href = window.location.origin + '/login'
+      dispatch({ type: CREATE_PASSWORD_SUCCESS });
     });
   }
 }
@@ -263,7 +308,7 @@ export function getUser() {
     const token = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refreshToken');
 
-    dispatch({ type: REQUEST });
+    dispatch({ type: GET_USER_REQUEST });
 
     fetch('https://norma.nomoreparties.space/api/auth/user', {
       method: 'GET',
@@ -279,15 +324,12 @@ export function getUser() {
     })
     .then((response) => response.json())
     .then((data) => {
-      // if (!data.success) {
-      //   throw new Error(data.message);
-      // }
-
-      if (!data.success && data.message && data.message === 'jwt expired') {
-        dispatch(getToken({ token: refreshToken }));
+      if (!data.success && ['jwt expired', 'invalid signature'].includes(data.message)) {
+        dispatch({ type: GET_USER_FAILED });
+        dispatch(getToken({ name: '1', token: refreshToken, callback: () => getUser() }));
       }
 
-      dispatch({ type: SUCCESS });
+      dispatch({ type: GET_USER_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
     });
   }
@@ -303,13 +345,12 @@ export function getUser() {
 //   }
 // }
 export function updateProfile(payload) {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    console.log('Token is not exist');
-  }
-
   return (dispatch) => {
+    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    dispatch({ type: UPDATE_PROFILE_REQUEST });
+
     fetch('https://norma.nomoreparties.space/api/auth/user', {
       method: 'PATCH',
       mode: 'cors',
@@ -324,5 +365,14 @@ export function updateProfile(payload) {
       body: JSON.stringify(payload)
     })
     .then((response) => response.json())
+    .then((data) => {
+      if (!data.success && ['jwt expired', 'invalid signature'].includes(data.message)) {
+        dispatch({ type: UPDATE_PROFILE_FAILED });
+        dispatch(getToken({ name: '2', token: refreshToken, callback: () => updateProfile(payload) }));
+      }
+
+      dispatch({ type: UPDATE_PROFILE_SUCCESS });
+      dispatch({ type: SET_USER, payload: data.user });
+    })
   }
 }

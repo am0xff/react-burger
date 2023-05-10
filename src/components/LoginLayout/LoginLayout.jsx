@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { 
   EmailInput, 
   PasswordInput, 
@@ -12,6 +12,11 @@ import classes from './LoginLayout.module.css';
 const LoginLayout = () => {
   const dispatch = useDispatch();
   const [state, setState] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { success } = useSelector((state) => state.auth)
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (event) => {
     const target = event.target;
@@ -23,33 +28,47 @@ const LoginLayout = () => {
     }));
   }
 
-  const handleSubmit = () => {
-    dispatch(login(state));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = e.target;
+
+    dispatch(login({
+      email: email.value,
+      password: password.value
+    }));
   }
+
+  useEffect(() => {
+    if (success) {
+      navigate(from, { replace: true })
+    }
+  }, [from, navigate, success]);
 
   return (
     <div className={classes.wrap}>
       <p className={`${classes.title} text text_type_main-medium mb-6`}>
         Вход
       </p>
-      <EmailInput
-        value={state.email || ''}
-        name={'email'}
-        isIcon={false}
-        extraClass="mb-6"
-        onChange={handleChange}
-      />
-      <PasswordInput
-        value={state.password || ''}
-        name={'password'}
-        extraClass="mb-6"
-        onChange={handleChange}
-      />
-      <div className={classes.buttonWrap}>
-        <Button htmlType="button" type="primary" size="medium" onClick={handleSubmit}>
-          Войти
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <EmailInput
+          value={state.email || ''}
+          name={'email'}
+          isIcon={false}
+          extraClass="mb-6"
+          onChange={handleChange}
+        />
+        <PasswordInput
+          value={state.password || ''}
+          name={'password'}
+          extraClass="mb-6"
+          onChange={handleChange}
+        />
+        <div className={classes.buttonWrap}>
+          <Button htmlType="submit" type="primary" size="medium">
+            Войти
+          </Button>
+        </div>
+      </form>
       <div className='mt-20'>
         <div className={`${classes.buttonGroup} mb-4`}>
           <p className="text text_type_main-default text_color_inactive">

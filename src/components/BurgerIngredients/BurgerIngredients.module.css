@@ -1,6 +1,6 @@
-.ingredients {
+.section {
   max-width: 600px;
-  height: calc(100vh - 128px);
+  height: calc(100vh - 128px); /* 88 = header and 40 = bottom offset */
   display: flex;
   flex-direction: column;
 }

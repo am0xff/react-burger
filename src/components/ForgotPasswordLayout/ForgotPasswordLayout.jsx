@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { 
   EmailInput,
   Button 
@@ -10,7 +10,10 @@ import { getCodeForReset } from '../../services/actions/user';
 
 const ForgotPasswordLayout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [state, setState] = useState({});
+  const { success } = useSelector((state) => state.auth);
 
   const handleChange = (event) => {
     const target = event.target;
@@ -22,28 +25,42 @@ const ForgotPasswordLayout = () => {
     }));
   }
 
-  const handleSubmit = () => {
-    dispatch(getCodeForReset());
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const { email } = e.target;
+
+    dispatch(getCodeForReset({
+      email: email.value
+    }));
   }
+
+  useEffect(() => {
+    if (success) {
+      navigate('/reset-password', { state: { reset: true } })
+    }
+  }, [location, navigate, success])
   
   return (
     <main className={classes.wrap}>
       <p className={`${classes.title} text text_type_main-medium mb-6`}>
         Восстановление пароля
       </p>
-      <EmailInput
-        value={state.email || ''}
-        placeholder='Укажите e-mail'
-        name={'email'}
-        isIcon={false}
-        extraClass="mb-6"
-        onChange={handleChange}
-      />
-      <div className={classes.buttonWrap}>
-        <Button htmlType="button" type="primary" size="medium" onClick={handleSubmit}>
-          Восстановить
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <EmailInput
+          value={state.email || ''}
+          placeholder='Укажите e-mail'
+          name={'email'}
+          isIcon={false}
+          extraClass="mb-6"
+          onChange={handleChange}
+        />
+        <div className={classes.buttonWrap}>
+          <Button htmlType="submit" type="primary" size="medium">
+            Восстановить
+          </Button>
+        </div>
+      </form>
       <div className='mt-20'>
         <div className={`${classes.buttonGroup} mb-4`}>
           <p className="text text_type_main-default text_color_inactive">

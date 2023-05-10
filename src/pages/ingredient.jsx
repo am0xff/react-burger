@@ -1,13 +1,11 @@
-import AppHeader from '../components/AppHeader/AppHeader';
-import Ingredient from '../components/Ingredient/Ingredient';
+import { useLocation } from 'react-router-dom';
+import IngredientModal from '../components/IngredientModal/IngredientModal';
+import IngredientLayout from '../components/IngredientLayout/IngredientLayout';
 
 const IngredientPage = () => {
-  return (
-    <>
-      <AppHeader />
-      <Ingredient />
-    </>
-  )
+  const location = useLocation();
+
+  return location.state ? <IngredientModal /> : <IngredientLayout />
 }
 
 export default IngredientPage;

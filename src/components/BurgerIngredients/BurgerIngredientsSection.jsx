@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { ProductPropTypes } from '../../utils/types';
-import { ADD_INGREDIENT_DETAILS, OPEN_DETAILS_MODAL } from '../../services/actions/ingredientDetails';
 import BurgerIngredientsIngredient from './BurgerIngredientsIngredient';
 import classes from './BurgerIngredients.module.css';
 
 const BurgerIngredientsSection = ({ id, title, items, setTab }) => {
   const [ref, setRef] = useState();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleClickIngredient = (product) => {
-    dispatch({ type: ADD_INGREDIENT_DETAILS, payload: product })
-    dispatch({ type: OPEN_DETAILS_MODAL });
+  const handleClickIngredient = (productId) => {
+    navigate(`/ingredients/${productId}`, { state: 'modal' });
   };
 
   useEffect(() => {
@@ -49,7 +47,7 @@ const BurgerIngredientsSection = ({ id, title, items, setTab }) => {
               image={ingredient.image}
               name={ingredient.name}
               price={ingredient.price}
-              onClick={() => handleClickIngredient(ingredient)}
+              onClick={() => handleClickIngredient(ingredient._id)}
             />
           </li>
         ))}

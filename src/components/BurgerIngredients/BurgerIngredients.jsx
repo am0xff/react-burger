@@ -1,20 +1,14 @@
 import { useMemo, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../Modal/Modal';
-import IngredientDetails from '../IngredientDetails/IngredientDetails';
-import { DELETE_INGREDIENT_DETAILS, CLOSE_DETAILS_MODAL } from '../../services/actions/ingredientDetails';
 import { TYPE_INGREDIENT } from '../../utils/constants';
 import BurgerIngredientsSection from './BurgerIngredientsSection';
 import classes from './BurgerIngredients.module.css';
 
 const BurgerIngredients = () => {
   const [ref, setRef] = useState();
-  const dispatch = useDispatch();
   const [tab, setTab] = useState(0);
-  const ingredientDetails = useSelector((state) => state.ingredient.details);
   const ingredients = useSelector((state) => state.ingredients.items);
-  const modalDetails = useSelector((state) => state.ingredient.modal);
   const constructorItems = useSelector((state) => state.burgerConstructor.items);
 
   const countByIdIngredients = useMemo(() => {
@@ -50,11 +44,6 @@ const BurgerIngredients = () => {
       }));
   }, [countByIdIngredients, ingredients]);
 
-  const handleClose = () => {
-    dispatch({ type: CLOSE_DETAILS_MODAL });
-    dispatch({ type: DELETE_INGREDIENT_DETAILS });
-  };
-
   const handleTab = (id) => {
     const section = ref.querySelector(`[data-section-id="${id}"]`);
 
@@ -66,7 +55,7 @@ const BurgerIngredients = () => {
   };
 
   return (
-    <section className={`${classes.ingredients} pb-10`}>
+    <section className={`${classes.section} pb-10`}>
       <h2 className='text text_type_main-large pt-10 pb-5'>
           Соберите бургер
       </h2>
@@ -101,18 +90,6 @@ const BurgerIngredients = () => {
           setTab={setTab}
         />
       </div>
-      { modalDetails && (
-        <Modal heading='Детали ингредиента' onClose={handleClose}>
-          <IngredientDetails
-            image={ingredientDetails.image_large}
-            name={ingredientDetails.name}
-            proteins={ingredientDetails.proteins}
-            fat={ingredientDetails.fat}
-            carbohydrates={ingredientDetails.carbohydrates}
-            calories={ingredientDetails.calories}
-          />
-        </Modal>
-      ) }
     </section>
   )
 }

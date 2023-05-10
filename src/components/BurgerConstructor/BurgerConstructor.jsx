@@ -19,10 +19,9 @@ const BurgerConstructor = () => {
   const orderDetails = useSelector((state) => state.order.details);
   const ingredients = useSelector((state) => state.ingredients.items);
 
-  const isEmpty = !constructorItems.length;
-
   const { onClose } = useModal();
   
+  // eslint-disable-next-line no-unused-vars
   const [_, dropRef] = useDrop({
     accept: 'ingredient',
     drop: ({ id }) => {
@@ -62,8 +61,7 @@ const BurgerConstructor = () => {
 
   return (
     <section className={`${classes.section} pr-4 pl-4 pt-25`}>
-      <div ref={dropRef} className={`${classes.constructorBody} pl-8 ${isEmpty ? classes.empty : ''}`}>
-        {isEmpty && <p className='text text_type_main-large'>Добавьте ингредиенты</p>}
+      <div ref={dropRef} className={`${classes.constructorBody} pl-8`}>
         {bun && (
           <BurgerConstructorIngredient 
           type="top"

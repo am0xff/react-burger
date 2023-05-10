@@ -1,18 +1,13 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// PasswordInput
-import { Input, Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Input, Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import classes from './ProfileEdit.module.css';
-import { useCallback, useEffect, useState } from 'react';
 import { getUser, updateProfile } from '../../services/actions/user';
 
 const ProfileEdit = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const [state, setState] = useState({});
-
-  const init = useCallback(() => {
-    setState(user)
-  }, [user]);
+  const { user: initialValue, success } = useSelector((state) => state.auth);
+  const [state, setState] = useState(null);
 
   const handleChange = (event) => {
     const target = event.target;
@@ -24,67 +19,83 @@ const ProfileEdit = () => {
     }));
   }
 
-  const handleSubmit = () => {
-    dispatch(updateProfile(state));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const { name, email, password } = e.target;
+
+    dispatch(updateProfile({
+      name: name.value,
+      email: email.value,
+      password: password.value
+    }));
   }
 
   const handleClear = () => {
-    init();
+    setState(initialValue);
   }
 
-  useEffect(() => {
+  useEffect(() => {    
     dispatch(getUser());
   }, [dispatch]);
 
   useEffect(() => {
-    if (user) {
-      setState(user);
+    if (success) {
+      setState(initialValue);
     }
-  }, [user])
+  }, [success, initialValue]);
+
+  const isDirty = useMemo(() => {
+    return JSON.stringify(initialValue) !== JSON.stringify(state);
+  }, [initialValue, state]);
 
   return (
     <div className={classes.wrap}>
-      <Input
-        type={'text'}
-        name={'name'}
-        value={state.name || ''}
-        placeholder={'Имя'}
-        extraClass="mb-6"
-        icon="EditIcon"
-        onChange={handleChange}
-      />
-      <EmailInput
-        name={'email'}
-        value={state.email || ''}
-        placeholder={'Логин'}
-        isIcon={true}
-        extraClass="mb-6"
-        onChange={handleChange}
-      />
-      {/* <PasswordInput
-        name={'password'}
-        value={''}
-        extraClass="mb-6"
-        icon="EditIcon"
-      /> */}
-      <div className={classes.buttons}>
-        <Button 
-          htmlType="button" 
-          type="secondary" 
-          size="medium" 
-          onClick={handleClear}
-        >
-          Отмена
-        </Button>
-        <Button 
-          htmlType="button" 
-          type="primary" 
-          size="medium" 
-          onClick={handleSubmit}
-        >
-          Сохранить
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <Input
+          type={'text'}
+          name={'name'}
+          value={state?.name || ''}
+          placeholder={'Имя'}
+          extraClass="mb-6"
+          icon="EditIcon"
+          onChange={handleChange}
+        />
+        <EmailInput
+          name={'email'}
+          value={state?.email || ''}
+          placeholder={'Логин'}
+          isIcon={true}
+          extraClass="mb-6"
+          onChange={handleChange}
+        />
+        <PasswordInput
+          name={'password'}
+          value={state?.password || ''}
+          extraClass="mb-6"
+          icon="EditIcon"
+          onChange={handleChange}
+        />
+        <div className={classes.buttons}>
+          <Button 
+            htmlType="button"
+            type="secondary" 
+            size="medium" 
+            onClick={handleClear}
+            disabled={!isDirty}
+          >
+            Отмена
+          </Button>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            size="medium"
+            disabled={!isDirty}
+          >
+            Сохранить
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }

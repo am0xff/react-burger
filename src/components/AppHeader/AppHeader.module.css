@@ -26,6 +26,10 @@
   text-decoration: none;
 }
 
+.navLinkActive {
+  color: inherit
+}
+
 .logo {
   flex: 1;
 }

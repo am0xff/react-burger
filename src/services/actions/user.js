@@ -69,19 +69,13 @@ export function register(payload) {
     .then(response => response.json())
     .then((data) => {
       if(!data.success) {
-        dispatch({ type: REGISTER_FAILED });
         throw new Error(data.message);
       }
 
-      // SAVE TOKEN
-      localStorage.setItem('token', data.accessToken);
-      
-      // SAVE REFRESH_TOKEN
-      localStorage.setItem('refreshToken', data.refreshToken);
-
-      dispatch({ type: SET_USER, payload: data.user });
-
       dispatch({ type: REGISTER_SUCCESS });
+    })
+    .catch(() => {
+      dispatch({ type: REGISTER_FAILED });
     });
   }
 }
@@ -147,8 +141,10 @@ export function login(payload) {
 //   "success": true,
 //   "message": "Successful logout"
 // }
-export function logout(payload) {
+export function logout() {
   return (dispatch) => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    
     dispatch({ type: LOGOUT_REQUEST });
 
     fetch('https://norma.nomoreparties.space/api/auth/logout', {
@@ -161,7 +157,9 @@ export function logout(payload) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        token: refreshToken
+      })
     })
     .then(response => response.json())
     .then((data) => {
@@ -329,8 +327,15 @@ export function getUser() {
         dispatch(getToken({ name: '1', token: refreshToken, callback: () => getUser() }));
       }
 
+      if (!data.success) {
+        throw new Error(data.message)
+      }
+
       dispatch({ type: GET_USER_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
+    })
+    .catch((err) => {
+      dispatch({ type: GET_USER_FAILED });
     });
   }
 }
@@ -371,8 +376,15 @@ export function updateProfile(payload) {
         dispatch(getToken({ name: '2', token: refreshToken, callback: () => updateProfile(payload) }));
       }
 
+      if (!data.success) {
+        throw new Error(data.message)
+      }
+
       dispatch({ type: UPDATE_PROFILE_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
     })
+    .catch((err) => {
+      dispatch({ type: UPDATE_PROFILE_FAILED });
+    });
   }
 }

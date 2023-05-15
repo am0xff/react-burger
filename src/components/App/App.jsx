@@ -24,19 +24,19 @@ function App() {
         </Route>
         <Route 
           path="/login"
-          element={<ProtectedRouteElement forAuth element={<LoginPage />} />}  
+          element={<ProtectedRouteElement onlyUnAuth element={<LoginPage />} />}  
         />
         <Route 
           path="/register"
-          element={<ProtectedRouteElement forAuth element={<RegisterPage />} />} 
+          element={<ProtectedRouteElement onlyUnAuth element={<RegisterPage />} />} 
         />
         <Route 
           path="/forgot-password"
-          element={<ProtectedRouteElement forAuth element={<ForgotPasswordPage />} />} 
+          element={<ProtectedRouteElement onlyUnAuth element={<ForgotPasswordPage />} />} 
         />
         <Route 
           path="/reset-password"
-          element={<ProtectedRouteElement forAuth element={<ResetPasswordPage />} />} 
+          element={<ProtectedRouteElement onlyUnAuth element={<ResetPasswordPage />} />} 
         />
         <Route 
           path="/profile"

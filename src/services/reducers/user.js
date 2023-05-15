@@ -30,7 +30,9 @@ const initialState = {
   user: null,
   request: false,
   success: false,
-  failed: false
+  failed: false,
+  logoutSuccess: false,
+  registerSuccess: false
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -47,11 +49,11 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         request: true,
         success: false,
-        failed: false
+        failed: false,
+        logoutSuccess: false,
+        registerSuccess: false
       }
-    case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
-    case LOGOUT_SUCCESS:
     case GET_TOKEN_SUCCESS:
     case GET_CODE_SUCCESS:
     case CREATE_PASSWORD_SUCCESS:
@@ -61,7 +63,18 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         request: false,
         failed: false,
+        logoutSuccess: false,
         success: true
+      }
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        registerSuccess: true
+      }
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        logoutSuccess: true
       }
     case REGISTER_FAILED:
     case LOGIN_FAILED:
@@ -74,8 +87,10 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         request: false,
-        failed: true,
-        success: false
+        logoutSuccess: false,
+        success: false,
+        registerSuccess: false,
+        failed: true
       }
     case SET_USER:
       return {

@@ -1,12 +1,14 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import { ADD_ITEM } from '../../services/actions/burgerConstructor';
 import { DELETE_ORDER_DETAILS, createOrder } from '../../services/actions/order';
+import { getUser } from '../../services/actions/user';
 import { TYPE_INGREDIENT } from '../../utils/constants';
 import BurgerConstructorIngredient from './BurgerConstructorIngredient';
 import BurgerConstructorDraggable from './BurgerConstructorDraggable';
@@ -14,6 +16,8 @@ import classes from './BurgerConstructor.module.css';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const { user } = useSelector((state) => state.auth);
   const constructorItems = useSelector((state) => state.burgerConstructor.items);
   const orderRequest = useSelector((state) => state.order.request);
   const orderDetails = useSelector((state) => state.order.details);
@@ -51,6 +55,10 @@ const BurgerConstructor = () => {
   }, [bun?.price, constructorItemsWithoutBun]);
 
   const handleCreateOrder = () => {
+    if (!user) {
+      return navigate('/login');
+    }
+
     dispatch(createOrder([bun._id, ...constructorItemsWithoutBun.map(({_id}) => _id), bun._id]));
   }
 
@@ -58,6 +66,10 @@ const BurgerConstructor = () => {
     onClose();
     dispatch({ type: DELETE_ORDER_DETAILS });
   }
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch])
 
   return (
     <section className={`${classes.section} pr-4 pl-4 pt-25`}>

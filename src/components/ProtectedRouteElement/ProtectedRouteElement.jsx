@@ -1,14 +1,14 @@
 import { Navigate, useLocation } from 'react-router-dom';
 
 const ProtectedRouteElement = ({ element, onlyUnAuth = false }) => {
-  const token = localStorage.getItem('token');
+  const hasToken = !!localStorage.getItem('token');
   const location = useLocation();
 
-  if (!token && !onlyUnAuth) {
+  if (!hasToken && !onlyUnAuth) {
     return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  if (token && onlyUnAuth) {
+  if (hasToken && onlyUnAuth) {
     return <Navigate to="/" replace />
   }
 

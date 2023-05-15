@@ -14,7 +14,7 @@ const RegisterLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [state, setState] = useState({});
-  const { success } = useSelector((state) => state.auth);
+  const { registerSuccess } = useSelector((state) => state.auth);
 
   const handleChange = (event) => {
     const target = event.target;
@@ -39,10 +39,10 @@ const RegisterLayout = () => {
   }
 
   useEffect(() => {
-    if(success) {
-      navigate('/login');
+    if (registerSuccess) {
+      return navigate('/login');
     }
-  }, [navigate, success])
+  }, [navigate, registerSuccess]);
 
   return (
     <div className={classes.wrap}>

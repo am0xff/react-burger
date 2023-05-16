@@ -1,0 +1,9 @@
+.wrap {
+  padding: 120px 0;
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.title {
+  text-align: center;
+}

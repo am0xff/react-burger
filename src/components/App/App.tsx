@@ -11,10 +11,12 @@ import {
 } from '../../pages';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
 import ProfileEdit from '../ProfileEdit/ProfileEdit';
+import AppHeader from '../AppHeader/AppHeader';
 
 function App() {
   return (
     <BrowserRouter>
+      <AppHeader />
       <Routes>
         <Route 
           path="/" 

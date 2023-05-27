@@ -1,13 +1,16 @@
+import { v4 } from 'uuid';
 import { Ingredient } from '../api/types';
-
 import { 
   ADD_ITEM,
   DELETE_ITEM,
-  CHANGE_ORDER
+  CHANGE_ORDER,
+  RESET
 } from '../actions/burgerConstructor';
 
+type ConstructorItem = Ingredient & { uniqueId: string };
+
 export type BurgerConstructorStore = {
-  items: Ingredient[]
+  items: ConstructorItem[]
 }
 
 type Action = { type: string, payload: unknown }
@@ -26,7 +29,7 @@ export const burgerConstructorReducer = (state = initialState, action: Action) =
 
       return {
         ...state,
-        items: [...itemsTemp, ingredient]
+        items: [...itemsTemp, {...ingredient, uniqueId: v4()}]
       }
     }
     case DELETE_ITEM: {
@@ -68,6 +71,12 @@ export const burgerConstructorReducer = (state = initialState, action: Action) =
         ...state,
         items: [...(bun ? [bun] : []), ...tempItems]
       }
+    }
+    case RESET: {
+      return {
+        ...state,
+        items: []
+      } 
     }
     default:
       return state

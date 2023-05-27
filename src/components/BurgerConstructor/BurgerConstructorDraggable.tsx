@@ -19,9 +19,9 @@ const BurgerConstructorDraggable = () => {
 
   return (
     <ul className={`${classes.constructorList}`}>
-      {constructorItemsWithoutBun.map(({ _id, name, price, image }, index) => {
+      {constructorItemsWithoutBun.map(({ _id, uniqueId, name, price, image }, index) => {
         return (
-          <li className={`${classes.constructorItem}`} key={_id + index}>
+          <li className={`${classes.constructorItem}`} key={uniqueId}>
             <BurgerConstructorIngredient
               id={_id}
               index={index}

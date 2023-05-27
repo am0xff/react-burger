@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import classes from './OrderDetails.module.css';
 import { OrderDetails as OrderDetailsType } from '../../services/api/types';
+import { RESET } from '../../services/actions/burgerConstructor';
 import doneImage from '../../images/done.png';
 
 type Props = {
@@ -7,15 +10,20 @@ type Props = {
 }
 
 const OrderDetails = ({ details }: Props) => {
+  const dispatch = useDispatch();
   const { order, success } = details;
 
-  if(!success) {
+  if (!success) {
     <div className={`${classes.details} pt-20 pb-20`}>
       <p className={`${classes.detailsNumber} text text_type_digits-large`}>
         Ошибка
       </p>
     </div>
   }
+
+  useEffect(() => {
+    dispatch({ type: RESET });
+  }, [dispatch])
 
   return (
     <div className={`${classes.details} pt-20 pb-20`}>

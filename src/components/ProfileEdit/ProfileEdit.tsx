@@ -1,37 +1,27 @@
-import { useEffect, useMemo, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, useMemo, FormEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { AuthStore } from '../../services/reducers/user';
+import useForm from '../../hooks/useForm';
 import classes from './ProfileEdit.module.css';
 import { getUser, updateProfile } from '../../services/actions/user';
 
 const ProfileEdit = () => {
   const dispatch: any = useDispatch();
   const { user: initialValue, success } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
-  const [state, setState] = useState<Partial<AuthStore['user']>>({
-    name: '',
+  const { values, handleChange, setValues } = useForm({
+    userName: '',
     email: '',
     password: ''
   });
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    const name = target.getAttribute('name');
-    const key = name === 'username' ? 'name' : name;
-
-    setState((state) => ({
-      ...state,
-      ...(key ? { [key]: target.value } : {})
-    }));
-  }
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    const { username, email, password } = e.currentTarget;
+    const { userName, email, password } = e.currentTarget;
 
     dispatch(updateProfile({
-      name: username.value,
+      name: userName.value,
       email: email.value,
       password: password.value
     }));
@@ -39,7 +29,13 @@ const ProfileEdit = () => {
 
   const handleClear = () => {
     if (initialValue) {
-      setState(initialValue);
+      const { name, email, password } = initialValue;
+      
+      setValues({
+        userName: name,
+        email, 
+        password
+      });
     }
   }
 
@@ -48,22 +44,28 @@ const ProfileEdit = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (success) {
-      setState(initialValue);
+    if (success && initialValue) {
+      const { name, email, password } = initialValue;
+
+      setValues({
+        userName: name,
+        email, 
+        password
+      });
     }
-  }, [success, initialValue]);
+  }, [success, initialValue, setValues]);
 
   const isDirty = useMemo(() => {
-    return JSON.stringify(initialValue) !== JSON.stringify(state);
-  }, [initialValue, state]);
+    return JSON.stringify(initialValue) !== JSON.stringify(values);
+  }, [initialValue, values]);
 
   return (
     <div className={classes.wrap}>
       <form onSubmit={handleSubmit}>
         <Input
           type={'text'}
-          name={'username'}
-          value={state?.name || ''}
+          name={'userName'}
+          value={values?.userName || ''}
           placeholder={'Имя'}
           extraClass="mb-6"
           icon="EditIcon"
@@ -71,7 +73,7 @@ const ProfileEdit = () => {
         />
         <EmailInput
           name={'email'}
-          value={state?.email || ''}
+          value={values?.email || ''}
           placeholder={'Логин'}
           isIcon={true}
           extraClass="mb-6"
@@ -79,7 +81,7 @@ const ProfileEdit = () => {
         />
         <PasswordInput
           name={'password'}
-          value={state?.password || ''}
+          value={values?.password || ''}
           extraClass="mb-6"
           icon="EditIcon"
           onChange={handleChange}

@@ -34,7 +34,6 @@ const BurgerIngredientsIngredient = ({ id, image, price, name, count, onClick }:
         <img src={image} alt={name} />
       </div>
       <p className={`${classes.ingredientPrice} text text_type_digits-default mt-1 mb-1`}>
-        {/* className='ml-2' */}
         {price} <CurrencyIcon type='primary' />
       </p>
       <p className='text text_type_main-default'>

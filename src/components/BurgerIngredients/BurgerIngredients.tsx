@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { TYPE_INGREDIENT } from '../../utils/constants';
 import { IngredientsStore } from '../../services/reducers/ingredients';
 import { BurgerConstructorStore } from '../../services/reducers/burgerConstructor';
 import BurgerIngredientsSection from './BurgerIngredientsSection';
@@ -21,7 +20,7 @@ const BurgerIngredients = () => {
 
   const bunListWithCount = useMemo(() => {
     return ingredients
-      .filter(({ type }) => type === TYPE_INGREDIENT.BUN)
+      .filter(({ type }) => type === 'bun')
       .map((item) => ({
         ...item,
         count: countByIdIngredients[item._id] || 0
@@ -30,7 +29,7 @@ const BurgerIngredients = () => {
 
   const mainListWithCount = useMemo(() => {
     return ingredients
-      .filter(({ type }) => type === TYPE_INGREDIENT.MAIN)
+      .filter(({ type }) => type === 'main')
       .map((item) => ({
         ...item,
         count: countByIdIngredients[item._id] || 0
@@ -39,7 +38,7 @@ const BurgerIngredients = () => {
 
   const sauceListWithCount = useMemo(() => {
     return ingredients
-      .filter(({ type }) => type === TYPE_INGREDIENT.SAUCE)
+      .filter(({ type }) => type === 'sauce')
       .map((item) => ({
         ...item,
         count: countByIdIngredients[item._id] || 0

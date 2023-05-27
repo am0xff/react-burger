@@ -22,7 +22,7 @@ const BurgerConstructorIngredient = ({
   index,
   changeOrder,
   isDraggable,
-  type = 'top',
+  type,
   text,
   price,
   isLocked = false,

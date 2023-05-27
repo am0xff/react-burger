@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { 
@@ -6,6 +6,7 @@ import {
   PasswordInput,
   Button 
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import useForm from '../../hooks/useForm';
 import { createNewPassword } from '../../services/actions/user';
 import classes from './ResetPasswordLayout.module.css';
 
@@ -13,22 +14,9 @@ const ResetPasswordLayout = () => {
   const dispatch: any = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [state, setState] = useState<{ password: string, token: string }>({
-    password: '', 
-    token: ''
-  });
-
+  const { values, handleChange } = useForm({ password: '', token: '' });
+  
   const isReset = location?.state?.reset || false;
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    const name = target.getAttribute('name');
-
-    setState((state) => ({
-      ...state,
-      ...(name ? { [name]: target.value } : {})
-    }));
-  }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +43,7 @@ const ResetPasswordLayout = () => {
       <form onSubmit={handleSubmit}>
         <PasswordInput
           placeholder='Введите новый пароль'
-          value={state.password || ''}
+          value={values.password || ''}
           name={'password'}
           extraClass="mb-6"
           onChange={handleChange}
@@ -63,7 +51,7 @@ const ResetPasswordLayout = () => {
         <Input
           type={'text'}
           placeholder={'Введите код из письма'}
-          value={state.token || ''}
+          value={values.token || ''}
           name={'token'}
           error={false}
           size={'default'}

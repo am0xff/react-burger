@@ -1,7 +1,8 @@
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, FormEvent } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import useForm from '../../hooks/useForm';
 import { getCodeForReset } from '../../services/actions/user';
 import { AuthStore } from '../../services/reducers/user';
 import classes from './ForgotPasswordLayout.module.css';
@@ -10,18 +11,8 @@ const ForgotPasswordLayout = () => {
   const dispatch: any = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [state, setState] = useState<{ email: string }>({ email: '' });
   const { success } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    const name = target.getAttribute('name');
-
-    setState((state) => ({
-      ...state,
-      ...(name ? { [name]: target.value } : {})
-    }));
-  }
+  const { values, handleChange } = useForm({ email: '' })
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +35,7 @@ const ForgotPasswordLayout = () => {
       </p>
       <form onSubmit={handleSubmit}>
         <EmailInput
-          value={state.email || ''}
+          value={values.email || ''}
           placeholder='Укажите e-mail'
           name={'email'}
           isIcon={false}

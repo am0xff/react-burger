@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import { useEffect, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
@@ -7,6 +7,7 @@ import {
   Button,
   Input
 } from '@ya.praktikum/react-developer-burger-ui-components';
+import useForm from '../../hooks/useForm';
 import { AuthStore } from '../../services/reducers/user';
 import { register } from '../../services/actions/user';
 import classes from './RegisterLayout.module.css';
@@ -14,22 +15,13 @@ import classes from './RegisterLayout.module.css';
 const RegisterLayout = () => {
   const dispatch: any = useDispatch();
   const navigate = useNavigate();
-  const [state, setState] = useState<{name: string, email: string, password: string}>({
-    name: '', 
+  const { registerSuccess } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+
+  const { values, handleChange } = useForm({
+    userName: '',
     email: '',
     password: ''
   });
-  const { registerSuccess } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target;
-    const name = target.getAttribute('name');
-
-    setState((state) => ({
-      ...state,
-      ...(name ? { [name]: target.value } : {})
-    }));
-  }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,7 +50,7 @@ const RegisterLayout = () => {
         <Input
           type={'text'}
           placeholder={'Имя'}
-          value={state.name || ''}
+          value={values.userName || ''}
           name={'userName'}
           error={false}
           size={'default'}
@@ -66,14 +58,14 @@ const RegisterLayout = () => {
           onChange={handleChange}
         />
         <EmailInput
-          value={state.email || ''}
+          value={values.email || ''}
           name={'email'}
           isIcon={false}
           extraClass="mb-6"
           onChange={handleChange}
         />
         <PasswordInput
-          value={state.password || ''}
+          value={values.password || ''}
           name={'password'}
           extraClass="mb-6"
           onChange={handleChange}

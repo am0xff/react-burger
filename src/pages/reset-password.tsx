@@ -1,13 +1,7 @@
-import AppHeader from '../components/AppHeader/AppHeader';
 import ResetPasswordLayout from '../components/ResetPasswordLayout/ResetPasswordLayout';
 
 const ResetPasswordPage = () => {
-  return (
-    <>
-      <AppHeader />
-      <ResetPasswordLayout />
-    </>
-  )
+  return <ResetPasswordLayout />
 }
 
 export default ResetPasswordPage;

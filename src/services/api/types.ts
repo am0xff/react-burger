@@ -30,11 +30,86 @@ export type IngredientDetails = {
   carbohydrates: number
 }
 
-// IngredientDetails.propTypes = {
-//   image: PropTypes.string.isRequired,
-//   name: PropTypes.string.isRequired, 
-//   calories: PropTypes.number.isRequired,
-//   proteins: PropTypes.number.isRequired,
-//   fat: PropTypes.number.isRequired,
-//   carbohydrates: PropTypes.number.isRequired
-// }
+export type LoginResponse = {
+  success: boolean,
+  accessToken: string,
+  refreshToken: string,
+  user: {
+    email: string,
+    name: string
+  },
+  message: string
+}
+
+export type LoginPayload = {
+  email: string, 
+  password: string 
+}
+
+export type RegisterResponse = {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  },
+  accessToken: string,
+  refreshToken: string,
+  message: string
+}
+
+export type RegisterPayload = { 
+  name: string,
+  email: string, 
+  password: string 
+}
+
+export type LogoutResponse = {
+  success: boolean,
+  message: string
+}
+
+export type GetTokenResponse = {
+  success: boolean,
+  accessToken: string,
+  refreshToken: string,
+  message: string
+}
+
+export type GetCodeForResetResponse = {
+  success: boolean,
+  message: string
+}
+
+export type CreateNewPasswordResponse = {
+  success: boolean,
+  message: string
+}
+
+export type CreateNewPasswordPayload = {
+  password: string,
+  token: string
+}
+
+export type GetUserResponse = {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  },
+  message: string
+}
+
+export type UpdateProfileResponse = {
+  success: boolean,
+  user: {
+    email: string,
+    name: string
+  },
+  message: string
+}
+
+export type UpdateProfilePayload = {
+  email: string,
+  name: string,
+  password: string
+}

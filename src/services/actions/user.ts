@@ -1,3 +1,20 @@
+import { 
+  registerApi, 
+  loginApi, 
+  logoutApi, 
+  getTokenApi, 
+  getCodeForResetApi, 
+  createNewPasswordApi,
+  getUserApi,
+  updateProfileApi
+} from '../api/user';
+import { 
+  RegisterPayload, 
+  LoginPayload, 
+  CreateNewPasswordPayload, 
+  UpdateProfilePayload 
+} from '../api/types';
+
 export const SET_USER = 'SET_USER';
 
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
@@ -34,39 +51,11 @@ export const UPDATE_PROFILE_FAILED = 'UPDATE_PROFILE_FAILED';
 
 
 
-// payload is ->
-// {
-//   "email": "", 
-//   "password": "", 
-//   "name": "" 
-// } 
-// response is ->
-// {
-//   "success": true,
-//   "user": {
-//     "email": "",
-//     "name": ""
-//   },
-//   "accessToken": "Bearer ...",
-//   "refreshToken": ""
-// }
-export function register(payload: { name: string, email: string, password: string }) {
+export function register(payload: RegisterPayload) {
   return (dispatch: any) => {
     dispatch({ type: REGISTER_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/auth/register', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
+    registerApi(payload)
     .then((data) => {
       if(!data.success) {
         throw new Error(data.message);
@@ -80,38 +69,11 @@ export function register(payload: { name: string, email: string, password: strin
   }
 }
 
-// payload is ->
-// {
-//   "email": "", 
-//   "password": "" 
-// } 
-// response is ->
-// {
-//   "success": true,
-//   "accessToken": "Bearer ...",
-//   "refreshToken": "",
-//   "user": {
-//     "email": "",
-//     "name": ""
-//   }
-// } 
-export function login(payload: { email: string, password: string }) {
+export function login(payload: LoginPayload) {
   return (dispatch: any) => {
     dispatch({ type: LOGIN_REQUEST });
-    
-    fetch('https://norma.nomoreparties.space/api/auth/login', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
+
+    loginApi(payload)
     .then((data) => {
       if(!data.success) {
         dispatch({ type: LOGIN_FAILED });
@@ -127,41 +89,18 @@ export function login(payload: { email: string, password: string }) {
       dispatch({ type: SET_USER, payload: data.user });
 
       dispatch({ type: LOGIN_SUCCESS });
+    })
+    .catch(() => {
+      dispatch({ type: LOGIN_FAILED });
     });
   }
 }
 
-
-// payload is
-// {
-//   "token": "значение refreshToken"
-// } 
-// response is
-// {
-//   "success": true,
-//   "message": "Successful logout"
-// }
 export function logout() {
   return (dispatch: any) => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    
     dispatch({ type: LOGOUT_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/auth/logout', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        token: refreshToken
-      })
-    })
-    .then(response => response.json())
+    logoutApi()
     .then((data) => {
       if(!data.success) {
         dispatch({ type: LOGOUT_FAILED });
@@ -169,39 +108,22 @@ export function logout() {
 
       dispatch({ type: LOGOUT_SUCCESS });
       localStorage.clear();
+    })
+    .catch(() => {
+      dispatch({ type: LOGOUT_FAILED });
     });
   }
 }
 
-// payload is 
-// {
-//   "token": "значение refreshToken"
-// }
-// response is
-// {
-//   "success": true,
-//   "accessToken": "Bearer ...",
-//   "refreshToken": ""
-// }
-export function getToken(payload: any) {
+export function getToken(payload: { token?: string, callback: () => void }) {
   return (dispatch: any) => {
     dispatch({ type: GET_TOKEN_REQUEST });
 
     const { token, callback } = payload;
 
-    fetch('https://norma.nomoreparties.space/api/auth/token', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({token})
-    })
-    .then(response => response.json())
+    if(!token) return;
+
+    getTokenApi(token)
     .then((data) => {
       if(!data.success) {
         throw new Error(data.message);
@@ -216,36 +138,18 @@ export function getToken(payload: any) {
       dispatch({ type: GET_TOKEN_SUCCESS });
 
       dispatch(callback());
+    })
+    .catch((err) => {      
+      dispatch({ type: GET_TOKEN_FAILED });
     });
   }
 }
 
-// payload is 
-// {
-//   "email": ""
-// } 
-// response is ->
-// {
-//   "success": true,
-//   "message": "Reset email sent"
-// }
-export function getCodeForReset(payload: { email: string }) {
+export function getCodeForReset({ email }: { email: string }) {
   return (dispatch: any) => {
     dispatch({ type: GET_CODE_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/password-reset', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    })
-    .then((response) => response.json())
+    getCodeForResetApi(email)
     .then((data) => {
       if (!data.success) {
         dispatch({ type: GET_CODE_FAILED });
@@ -253,131 +157,63 @@ export function getCodeForReset(payload: { email: string }) {
 
       dispatch({ type: GET_CODE_SUCCESS });
     })
+    .catch(() => {
+      dispatch({ type: GET_CODE_FAILED });
+    });
   }
 }
 
-// payload is
-// {
-//   "password": "",
-//   "token": ""
-// }
-// response is
-// {
-//   "success": true,
-//   "message": "Password successfully reset"
-// }
-export function createNewPassword(payload: { password: string, token: string }) {
+export function createNewPassword(payload: CreateNewPasswordPayload) {
   return (dispatch: any) => {
     dispatch({ type: CREATE_PASSWORD_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/password-reset/reset', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    })
-    .then((response) => response.json())
+    createNewPasswordApi(payload)
     .then((data) => {
       if (!data.success) {
         dispatch({ type: CREATE_PASSWORD_FAILED });
       }
 
       dispatch({ type: CREATE_PASSWORD_SUCCESS });
+    })
+    .catch(() => {
+      dispatch({ type: CREATE_PASSWORD_FAILED });
     });
   }
 }
 
-// response is
-// {
-//   "success": true,
-//   "user": {
-//     "email": "",
-//     "name": ""
-//   }
-// }
 export function getUser() {
   return (dispatch: any) => {
-    const token = localStorage.getItem('token');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem('refreshToken') || '';
 
     dispatch({ type: GET_USER_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/auth/user', {
-      method: 'GET',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token
-      } as any,
-    })
-    .then((response) => response.json())
+    getUserApi()
     .then((data) => {
-      if (!data.success && ['jwt expired', 'invalid signature'].includes(data.message)) {
+      if (['jwt expired', 'invalid signature'].includes(data.message)) {
         dispatch({ type: GET_USER_FAILED });
-        dispatch(getToken({ name: '1', token: refreshToken, callback: () => getUser() }));
-      }
-
-      if (!data.success) {
-        throw new Error(data.message)
+        dispatch(getToken({ token: refreshToken, callback: () => getUser() }));
       }
 
       dispatch({ type: GET_USER_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
     })
-    .catch((err) => {
+    .catch(() => {
       dispatch({ type: GET_USER_FAILED });
     });
   }
 }
 
-// payload is -> ?
-// response is -> 
-// {
-//   "success": true,
-//   "user": {
-//     "email": "",
-//     "name": ""
-//   }
-// }
-export function updateProfile(payload: { name: string, email: string, password: string }) {
+export function updateProfile(payload: UpdateProfilePayload) {
   return (dispatch: any) => {
-    const token = localStorage.getItem('token');
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem('refreshToken') || '';
 
     dispatch({ type: UPDATE_PROFILE_REQUEST });
 
-    fetch('https://norma.nomoreparties.space/api/auth/user', {
-      method: 'PATCH',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": token
-      } as any,
-      body: JSON.stringify(payload)
-    })
-    .then((response) => response.json())
+    updateProfileApi(payload)
     .then((data) => {
-      if (!data.success && ['jwt expired', 'invalid signature'].includes(data.message)) {
+      if (['jwt expired', 'invalid signature'].includes(data.message)) {
         dispatch({ type: UPDATE_PROFILE_FAILED });
-        dispatch(getToken({ name: '2', token: refreshToken, callback: () => updateProfile(payload) }));
-      }
-
-      if (!data.success) {
-        throw new Error(data.message)
+        dispatch(getToken({ token: refreshToken, callback: () => updateProfile(payload) }));
       }
 
       dispatch({ type: UPDATE_PROFILE_SUCCESS });

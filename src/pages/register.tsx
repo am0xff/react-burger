@@ -1,13 +1,7 @@
-import AppHeader from '../components/AppHeader/AppHeader';
 import RegisterLayout from '../components/RegisterLayout/RegisterLayout';
 
 const RegisterPage = () => {
-  return (
-    <>
-      <AppHeader />
-      <RegisterLayout />
-    </>
-  )
+  return <RegisterLayout />
 }
 
 export default RegisterPage;

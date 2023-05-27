@@ -104,8 +104,9 @@ const BurgerConstructor = () => {
       <footer className={`${classes.constructorFooter} mt-10`}>
         <p className="text text_type_digits-medium mr-10">
           <span className='mr-2'>{totalPrice}</span>
-          {/* className='ml-2' */}
-          <CurrencyIcon type='primary' />
+          <span className='ml-2'>
+            <CurrencyIcon type='primary'  />
+          </span>          
         </p>
         <Button 
           htmlType="button" 

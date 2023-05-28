@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { v4 } from 'uuid';
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
@@ -16,8 +17,6 @@ import { BurgerConstructorStore } from '../../services/reducers/burgerConstructo
 import BurgerConstructorIngredient from './BurgerConstructorIngredient';
 import BurgerConstructorDraggable from './BurgerConstructorDraggable';
 import classes from './BurgerConstructor.module.css';
-
-
 
 const BurgerConstructor = () => {
   const dispatch: any = useDispatch();
@@ -37,7 +36,10 @@ const BurgerConstructor = () => {
 
       const ingredient = ingredients.find(({ _id }) => _id === id);
 
-      dispatch({ type: ADD_ITEM, payload: ingredient });
+      dispatch({ type: ADD_ITEM, payload: {
+        ...ingredient,
+        uniqueId: v4()
+      } });
     },
     collect: (monitor) => ({
         isOver: monitor.isOver()

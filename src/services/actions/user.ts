@@ -49,18 +49,12 @@ export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST';
 export const UPDATE_PROFILE_SUCCESS = 'UPDATE_PROFILE_SUCCESS';
 export const UPDATE_PROFILE_FAILED = 'UPDATE_PROFILE_FAILED';
 
-
-
 export function register(payload: RegisterPayload) {
   return (dispatch: any) => {
     dispatch({ type: REGISTER_REQUEST });
 
     registerApi(payload)
-    .then((data) => {
-      if(!data.success) {
-        throw new Error(data.message);
-      }
-
+    .then(() => {
       dispatch({ type: REGISTER_SUCCESS });
     })
     .catch(() => {
@@ -75,11 +69,6 @@ export function login(payload: LoginPayload) {
 
     loginApi(payload)
     .then((data) => {
-      if(!data.success) {
-        dispatch({ type: LOGIN_FAILED });
-        throw new Error(data.message);
-      }
-
       // SAVE TOKEN
       localStorage.setItem('token', data.accessToken);
       
@@ -101,11 +90,7 @@ export function logout() {
     dispatch({ type: LOGOUT_REQUEST });
 
     logoutApi()
-    .then((data) => {
-      if(!data.success) {
-        dispatch({ type: LOGOUT_FAILED });
-      }
-
+    .then(() => {
       dispatch({ type: LOGOUT_SUCCESS });
       localStorage.clear();
     })
@@ -125,10 +110,6 @@ export function getToken(payload: { token?: string, callback: () => void }) {
 
     getTokenApi(token)
     .then((data) => {
-      if(!data.success) {
-        throw new Error(data.message);
-      }
-      
       // SAVE TOKEN
       localStorage.setItem('token', data.accessToken);
       
@@ -150,11 +131,7 @@ export function getCodeForReset({ email }: { email: string }) {
     dispatch({ type: GET_CODE_REQUEST });
 
     getCodeForResetApi(email)
-    .then((data) => {
-      if (!data.success) {
-        dispatch({ type: GET_CODE_FAILED });
-      }
-
+    .then(() => {
       dispatch({ type: GET_CODE_SUCCESS });
     })
     .catch(() => {
@@ -168,11 +145,7 @@ export function createNewPassword(payload: CreateNewPasswordPayload) {
     dispatch({ type: CREATE_PASSWORD_REQUEST });
 
     createNewPasswordApi(payload)
-    .then((data) => {
-      if (!data.success) {
-        dispatch({ type: CREATE_PASSWORD_FAILED });
-      }
-
+    .then(() => {
       dispatch({ type: CREATE_PASSWORD_SUCCESS });
     })
     .catch(() => {
@@ -189,16 +162,15 @@ export function getUser() {
 
     getUserApi()
     .then((data) => {
-      if (['jwt expired', 'invalid signature'].includes(data.message)) {
-        dispatch({ type: GET_USER_FAILED });
-        dispatch(getToken({ token: refreshToken, callback: () => getUser() }));
-      }
-
       dispatch({ type: GET_USER_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
     })
-    .catch(() => {
+    .catch((err) => {
       dispatch({ type: GET_USER_FAILED });
+
+      if (err.status === 403) {
+        dispatch(getToken({ token: refreshToken, callback: () => getUser() }));
+      }
     });
   }
 }
@@ -211,16 +183,15 @@ export function updateProfile(payload: UpdateProfilePayload) {
 
     updateProfileApi(payload)
     .then((data) => {
-      if (['jwt expired', 'invalid signature'].includes(data.message)) {
-        dispatch({ type: UPDATE_PROFILE_FAILED });
-        dispatch(getToken({ token: refreshToken, callback: () => updateProfile(payload) }));
-      }
-
       dispatch({ type: UPDATE_PROFILE_SUCCESS });
       dispatch({ type: SET_USER, payload: data.user });
     })
     .catch((err) => {
       dispatch({ type: UPDATE_PROFILE_FAILED });
+
+      if (err.status === 403) {
+        dispatch(getToken({ token: refreshToken, callback: () => updateProfile(payload) }));
+      }
     });
   }
 }

@@ -1,18 +1,23 @@
-import { BASE_API_URL } from "./constants"
+const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res: Response) => {
+const checkResponse = (res: any) => {
   if (res.ok) {
     return res.json();
   }
   
-  if (res.status === 403) {
-    return res.json();
+  return Promise.reject(res);
+};
+
+const checkSuccess = (res: any) => {
+  if (res && res.success) {
+    return res;
   }
 
   return Promise.reject(res);
-}
+};
 
-export const request = <T>(endpoint: string, options: RequestInit): Promise<T & { message: string }> => {
-  return fetch(`${BASE_API_URL}${endpoint}`, options)
-    .then<T & { message: string }>(checkResponse)
-}
+export const request = <T>(endpoint: string, options?: RequestInit): Promise<T> => {
+  return fetch(`${BASE_URL}${endpoint}`, options)
+    .then(checkResponse)
+    .then(checkSuccess);
+};

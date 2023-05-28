@@ -15,8 +15,8 @@ export const createOrder = (payload: string[]) => {
     .then(data => {
       dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
     })
-    .catch(err => {
+    .catch(() => {
       dispatch({ type: CREATE_ORDER_FAILED });
-    })
+    });
   }
 }

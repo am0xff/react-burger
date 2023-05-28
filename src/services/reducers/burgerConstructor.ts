@@ -1,4 +1,3 @@
-import { v4 } from 'uuid';
 import { Ingredient } from '../api/types';
 import { 
   ADD_ITEM,
@@ -7,7 +6,7 @@ import {
   RESET
 } from '../actions/burgerConstructor';
 
-type ConstructorItem = Ingredient & { uniqueId: string };
+export type ConstructorItem = Ingredient & { uniqueId: string };
 
 export type BurgerConstructorStore = {
   items: ConstructorItem[]
@@ -29,7 +28,7 @@ export const burgerConstructorReducer = (state = initialState, action: Action) =
 
       return {
         ...state,
-        items: [...itemsTemp, {...ingredient, uniqueId: v4()}]
+        items: [...itemsTemp, ingredient]
       }
     }
     case DELETE_ITEM: {

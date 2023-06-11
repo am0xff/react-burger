@@ -1,16 +1,14 @@
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import { IngredientsStore } from '../../services/reducers/ingredients';
-import { BurgerConstructorStore } from '../../services/reducers/burgerConstructor';
+import { useSelector } from '../../services/hooks';
 import BurgerIngredientsSection from './BurgerIngredientsSection';
 import classes from './BurgerIngredients.module.css';
 
 const BurgerIngredients = () => {
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
   const [tab, setTab] = useState<number>(0);
-  const { items: ingredients } = useSelector<{ ingredients: IngredientsStore }, IngredientsStore>((state) => state.ingredients);
-  const { items: constructorItems } = useSelector<{ burgerConstructor: BurgerConstructorStore }, BurgerConstructorStore>((state) => state.burgerConstructor);
+  const { items: ingredients } = useSelector((state) => state.ingredients);
+  const { items: constructorItems } = useSelector((state) => state.burgerConstructor);
 
   const countByIdIngredients = useMemo(() => {
     return constructorItems.reduce((acc, {_id}) => {

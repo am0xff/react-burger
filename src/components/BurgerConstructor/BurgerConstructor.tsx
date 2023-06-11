@@ -1,19 +1,13 @@
 import { useEffect, useMemo } from 'react';
 import { useDrop } from 'react-dnd';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import useModal from '../Modal/useModal';
 import OrderDetails from '../OrderDetails/OrderDetails';
-import { ADD_ITEM } from '../../services/actions/burgerConstructor';
-import { DELETE_ORDER_DETAILS, createOrder } from '../../services/actions/order';
-import { getUser } from '../../services/actions/user';
-import { AuthStore } from '../../services/reducers/user';
-import { OrderStore } from '../../services/reducers/order';
-import { IngredientsStore } from '../../services/reducers/ingredients';
-import { BurgerConstructorStore } from '../../services/reducers/burgerConstructor';
+import { addItemAction, resetOrderDetailsAction, createOrder, getUser } from '../../services/actions';
+import { useSelector, useDispatch } from '../../services/hooks';
 import BurgerConstructorIngredient from './BurgerConstructorIngredient';
 import BurgerConstructorDraggable from './BurgerConstructorDraggable';
 import classes from './BurgerConstructor.module.css';
@@ -21,11 +15,11 @@ import classes from './BurgerConstructor.module.css';
 const BurgerConstructor = () => {
   const dispatch: any = useDispatch();
   const navigate = useNavigate()
-  const { user } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
-  const { items: constructorItems } = useSelector<{ burgerConstructor: BurgerConstructorStore }, BurgerConstructorStore>((state) => state.burgerConstructor);
-  const { request: orderRequest } = useSelector<{ order: OrderStore }, OrderStore>((state) => state.order);
-  const { details: orderDetails } = useSelector<{ order: OrderStore }, OrderStore>((state) => state.order);
-  const { items: ingredients } = useSelector<{ ingredients: IngredientsStore }, IngredientsStore>((state) => state.ingredients);
+  const { user } = useSelector((state) => state.auth);
+  const { items: constructorItems } = useSelector((state) => state.burgerConstructor);
+  const { request: orderRequest } = useSelector((state) => state.order);
+  const { details: orderDetails } = useSelector((state) => state.order);
+  const { items: ingredients } = useSelector((state) => state.ingredients);
 
   const { onClose } = useModal();
   
@@ -36,10 +30,9 @@ const BurgerConstructor = () => {
 
       const ingredient = ingredients.find(({ _id }) => _id === id);
 
-      dispatch({ type: ADD_ITEM, payload: {
-        ...ingredient,
-        uniqueId: v4()
-      } });
+      if(ingredient) {
+        dispatch(addItemAction({...ingredient, uniqueId: v4()}))
+      }
     },
     collect: (monitor) => ({
         isOver: monitor.isOver()
@@ -73,7 +66,7 @@ const BurgerConstructor = () => {
 
   const handleCloseModal = () => {
     onClose();
-    dispatch({ type: DELETE_ORDER_DETAILS });
+    dispatch(resetOrderDetailsAction());
   }
 
   useEffect(() => {
@@ -120,7 +113,7 @@ const BurgerConstructor = () => {
           Нажми на меня
         </Button>
       </footer>
-      {orderDetails && (
+      {!!orderDetails.name && (
         <Modal onClose={handleCloseModal}>
           <OrderDetails details={orderDetails} />
         </Modal>

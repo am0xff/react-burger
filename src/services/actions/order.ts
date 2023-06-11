@@ -1,22 +1,58 @@
-import { createOrderApi } from '../api/order';
+import { createOrderApi } from '../../api/order';
+import { CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAILED, RESET_ORDER_DETAILS } from '../constants';
+import { OrderDetails } from '../types/data';
+import { AppThunk, AppDispatch } from '../types';
 
-export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
-export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
-export const CREATE_ORDER_FAILED = 'CREATE_ORDER_FAILED';
-export const DELETE_ORDER_DETAILS = 'DELETE_ORDER_DETAILS';
-export const OPEN_ORDER_MODAL = 'OPEN_ORDER_MODAL';
-export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
+export interface ICreateOrderAction {
+  readonly type: typeof CREATE_ORDER_REQUEST;
+}
 
-export const createOrder = (payload: string[]) => {
-  return (dispatch: any) => {
-    dispatch({ type: CREATE_ORDER_REQUEST });
+export interface ICreateOrderFailedAction {
+  readonly type: typeof CREATE_ORDER_FAILED;
+}
+
+export interface ICreateOrderSuccessAction {
+  readonly type: typeof CREATE_ORDER_SUCCESS;
+  readonly payload: OrderDetails
+}
+
+export interface IResetOrderDetailsAction {
+  readonly type: typeof RESET_ORDER_DETAILS;
+}
+
+export type TOrderActions = 
+  | ICreateOrderAction
+  | ICreateOrderFailedAction
+  | ICreateOrderSuccessAction
+  | IResetOrderDetailsAction;
+
+export const createOrderAction = (): ICreateOrderAction => ({
+  type: CREATE_ORDER_REQUEST
+});
+
+export const createOrderFailedAction = (): ICreateOrderFailedAction => ({
+  type: CREATE_ORDER_FAILED
+});
+
+export const createOrderSuccessAction = (payload: OrderDetails): ICreateOrderSuccessAction => ({
+  type: CREATE_ORDER_SUCCESS,
+  payload
+});
+
+export const resetOrderDetailsAction = (): IResetOrderDetailsAction => ({
+  type: RESET_ORDER_DETAILS
+});
+
+export const createOrder = (payload: string[]): AppThunk => {
+  return (dispatch: AppDispatch) => {
+    dispatch(createOrderAction());
 
     createOrderApi(payload)
-    .then(data => {
-      dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
+    .then((data) => {
+      dispatch(createOrderSuccessAction(data));
     })
     .catch(() => {
-      dispatch({ type: CREATE_ORDER_FAILED });
+      dispatch(createOrderFailedAction());
     });
   }
 }

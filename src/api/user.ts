@@ -11,9 +11,10 @@ import {
   GetUserResponse,
   UpdateProfileResponse,
   UpdateProfilePayload
-} from './types';
+} from '../services/types/data';
 import { request } from './';
 
+// TODO: Какие данные возвращает?
 export const registerApi = (payload: RegisterPayload): Promise<RegisterResponse> => {
   return request('/auth/register', {
     method: 'POST',

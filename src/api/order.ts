@@ -1,6 +1,7 @@
 import { request } from './';
+import { OrderDetails } from '../services/types/data'
 
-export const createOrderApi = (payload: string[]): Promise<unknown> => {
+export const createOrderApi = (payload: string[]): Promise<OrderDetails> => {
   return request('/orders', {
     method: "POST",
     headers: {

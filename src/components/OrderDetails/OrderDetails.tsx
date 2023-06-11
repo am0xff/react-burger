@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import classes from './OrderDetails.module.css';
-import { OrderDetails as OrderDetailsType } from '../../services/api/types';
-import { RESET } from '../../services/actions/burgerConstructor';
+import { OrderDetails as OrderDetailsType } from '../../services/types/data';
+import { resetAction } from '../../services/actions';
 import doneImage from '../../images/done.png';
 
 type Props = {
@@ -22,7 +22,7 @@ const OrderDetails = ({ details }: Props) => {
   }
 
   useEffect(() => {
-    dispatch({ type: RESET });
+    dispatch(resetAction());
   }, [dispatch])
 
   return (

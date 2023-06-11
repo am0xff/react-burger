@@ -1,20 +1,19 @@
 import { useCallback, useMemo } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { CHANGE_ORDER } from '../../services/actions/burgerConstructor';
-import { BurgerConstructorStore } from '../../services/reducers/burgerConstructor';
+import { changeOrderAction } from '../../services/actions';
+import { useSelector, useDispatch } from '../../services/hooks';
 import BurgerConstructorIngredient from './BurgerConstructorIngredient';
 import classes from './BurgerConstructor.module.css';
 
 const BurgerConstructorDraggable = () => {
   const dispatch = useDispatch();
-  const { items: constructorItems } = useSelector<{ burgerConstructor: BurgerConstructorStore }, BurgerConstructorStore>((state) => state.burgerConstructor);
+  const { items: constructorItems } = useSelector((state) => state.burgerConstructor);
 
   const constructorItemsWithoutBun = useMemo(() => {
     return constructorItems.filter(({ type }) => type !== 'bun');
   }, [constructorItems])
 
   const changeOrder = useCallback((dragIndex: number, hoverIndex: number) => {
-    dispatch({ type: CHANGE_ORDER, payload: { dragIndex, hoverIndex } })
+    dispatch(changeOrderAction({ dragIndex, hoverIndex }));
   }, [dispatch]);
 
   return (

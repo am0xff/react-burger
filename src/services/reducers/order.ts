@@ -1,28 +1,25 @@
-import { OrderDetails } from '../api/types';
+import { OrderDetails } from '../types/data';
 import { 
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
   CREATE_ORDER_FAILED,
-  DELETE_ORDER_DETAILS,
-  OPEN_ORDER_MODAL,
-  CLOSE_ORDER_MODAL
-} from '../actions/order';
+  RESET_ORDER_DETAILS,
+} from '../constants';
+import { TOrderActions } from '../actions';
 
 export type OrderStore = {
-  details: OrderDetails | undefined,
+  details: OrderDetails,
   request: boolean,
   failed: boolean
 }
 
-type Action = { type: string; payload: OrderDetails };
-
 const initialState: OrderStore = {
-  details: undefined,
+  details: {} as OrderDetails,
   request: false,
   failed: false
 }
 
-export const orderReducer = (state = initialState, action: Action) => {
+export const orderReducer = (state = initialState, action: TOrderActions) => {
   switch(action.type) {
     case CREATE_ORDER_REQUEST:
       return {
@@ -43,20 +40,10 @@ export const orderReducer = (state = initialState, action: Action) => {
         request: false,
         failed: true
       }
-    case DELETE_ORDER_DETAILS:
+    case RESET_ORDER_DETAILS:
       return {
         ...state,
-        details: null
-      }
-    case OPEN_ORDER_MODAL:
-      return {
-        ...state,
-        modalOrder: true
-      }
-    case CLOSE_ORDER_MODAL:
-      return {
-        ...state,
-        modalOrder: false
+        details: {} as OrderDetails
       }
     default:
       return state

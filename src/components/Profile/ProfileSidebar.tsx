@@ -1,8 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
 import ProfileSidebarItem from './ProfileSidebarItem';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { logout } from '../../services/actions/user';
-import { AuthStore } from '../../services/reducers/user';
+import { logout } from '../../services/actions';
+import { useDispatch, useSelector } from '../../services/hooks';
 import classes from './Profile.module.css';
 import { useEffect } from 'react';
 
@@ -11,7 +10,7 @@ const defaultClassName = `text text_type_main-medium ${classes.sidebarLink}`;
 const ProfileSidebar = () => {
   const dispatch: any = useDispatch();
   const navigate = useNavigate();
-  const { logoutSuccess } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+  const { logoutSuccess } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());

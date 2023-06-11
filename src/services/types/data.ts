@@ -30,14 +30,21 @@ export type IngredientDetails = {
   carbohydrates: number
 }
 
+export type User = { 
+  email: string, 
+  name: string, 
+  password?: string 
+}
+
 export type LoginResponse = {
   success: boolean,
   accessToken: string,
   refreshToken: string,
-  user: {
-    email: string,
-    name: string
-  },
+  user: User,
+  // user: {
+  //   email: string,
+  //   name: string
+  // },
   message: string
 }
 
@@ -48,10 +55,11 @@ export type LoginPayload = {
 
 export type RegisterResponse = {
   success: boolean,
-  user: {
-    email: string,
-    name: string
-  },
+  user: User,
+  // user: {
+  //   email: string,
+  //   name: string
+  // },
   accessToken: string,
   refreshToken: string,
   message: string
@@ -92,19 +100,21 @@ export type CreateNewPasswordPayload = {
 
 export type GetUserResponse = {
   success: boolean,
-  user: {
-    email: string,
-    name: string
-  },
+  // user: {
+  //   email: string,
+  //   name: string
+  // },
+  user: User,
   message: string
 }
 
 export type UpdateProfileResponse = {
   success: boolean,
-  user: {
-    email: string,
-    name: string
-  },
+  // user: {
+  //   email: string,
+  //   name: string
+  // },
+  user: User,
   message: string
 }
 
@@ -113,3 +123,4 @@ export type UpdateProfilePayload = {
   name: string,
   password: string
 }
+

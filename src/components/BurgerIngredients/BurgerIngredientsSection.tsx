@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Ingredient } from '../../services/api/types';
+import { Ingredient } from '../../services/types/data';
 import BurgerIngredientsIngredient from './BurgerIngredientsIngredient';
 import classes from './BurgerIngredients.module.css';
 

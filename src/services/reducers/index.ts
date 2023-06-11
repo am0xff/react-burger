@@ -6,7 +6,7 @@ import { userReducer } from './user';
 
 export const rootReducer = combineReducers({
   burgerConstructor: burgerConstructorReducer,
-  ingredients: ingredientsReducer,
   order: orderReducer,
+  ingredients: ingredientsReducer,
   auth: userReducer
 });

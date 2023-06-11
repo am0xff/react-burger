@@ -1,17 +1,16 @@
 import { useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import useForm from '../../hooks/useForm';
-import { AuthStore } from '../../services/reducers/user';
-import { login } from '../../services/actions/user';
+import { useDispatch, useSelector } from '../../services/hooks';
+import { login } from '../../services/actions';
 import classes from './LoginLayout.module.css';
 
 const LoginLayout = () => {
   const dispatch: any = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const { success } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+  const { success } = useSelector((state) => state.auth);
   const { values, handleChange } = useForm({ email: '', password: '' })
 
   const from = location.state?.from?.pathname || "/";

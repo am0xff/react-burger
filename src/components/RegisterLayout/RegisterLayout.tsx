@@ -1,6 +1,5 @@
 import { useEffect, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { 
   EmailInput, 
   PasswordInput, 
@@ -8,14 +7,14 @@ import {
   Input
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import useForm from '../../hooks/useForm';
-import { AuthStore } from '../../services/reducers/user';
-import { register } from '../../services/actions/user';
+import { useDispatch, useSelector } from '../../services/hooks';
+import { register } from '../../services/actions';
 import classes from './RegisterLayout.module.css';
 
 const RegisterLayout = () => {
   const dispatch: any = useDispatch();
   const navigate = useNavigate();
-  const { registerSuccess } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+  const { registerSuccess } = useSelector((state) => state.auth);
 
   const { values, handleChange } = useForm({
     userName: '',

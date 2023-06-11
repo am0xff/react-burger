@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet, useLocation, useMatch } from 'react-router-dom';
-import { getIngredients } from '../services/actions/ingredients';
+import { getIngredients } from '../services/actions';
 import BurgerLayout from '../components/BurgerLayout/BurgerLayout';
 
 const BurgerConstructorPage = () => {

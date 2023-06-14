@@ -101,7 +101,7 @@ const BurgerConstructor = () => {
           <span className='mr-2'>{totalPrice}</span>
           <span className='ml-2'>
             <CurrencyIcon type='primary'  />
-          </span>          
+          </span>
         </p>
         <Button 
           htmlType="button" 

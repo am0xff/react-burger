@@ -1,0 +1,50 @@
+.main {
+  padding: 40px 0 0 0;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 1240px;
+  width: 100%;
+}
+
+.feedContainer {
+  display: flex;
+  gap: 60px;
+  padding-top: 20px;
+}
+
+.feedList {
+  flex: 1;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 188px);
+  overflow-y: scroll;
+}
+
+.feedInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  flex: 1;
+}
+
+.feedInfoRow {
+  display: flex;
+  gap: 36px;
+}
+
+.feedInfoCell {
+  flex: 1;
+}
+
+.feedInfoItems {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 24px 0 0 0;
+  padding: 0;
+  list-style: none;
+}

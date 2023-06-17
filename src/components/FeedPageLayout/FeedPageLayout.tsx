@@ -1,10 +1,36 @@
+import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from '../../services/hooks';
 import FeedItem from '../FeedItem/FeedItem';
 import classes from './FeedPageLayout.module.css';
+import { Ingredient } from '../../services/types/data';
 
-const doneItems = ['034533', '034532', '034530', '034527', '034525'];
-const inProgressItems = ['034541', '034542', '034543'];
+const MAX_ORDERS_LIST_SIZE = 10;
 
 const FeedPageLayout = () => {
+  const navigate = useNavigate();
+
+  const { feed } = useSelector((state) => state.feed);
+  const { items } = useSelector((state) => state.ingredients);
+  
+  const ingredientsMap = useMemo(() => {
+    return items.reduce((acc, cur) => {
+      return {...acc, [cur._id]: cur}
+    }, {} as Record<string, Ingredient>);
+  }, [items]);
+
+  const doneOrders = useMemo(() => {
+    return feed?.orders.filter((order, index) => index < MAX_ORDERS_LIST_SIZE && order.status === 'done') || []
+  }, [feed?.orders]);
+
+  const inProgressOrders = useMemo(() => {
+    return feed?.orders.filter((order, index) => index < MAX_ORDERS_LIST_SIZE && order.status === 'inprogress') || []
+  }, [feed?.orders]);
+
+  const handleClick = (id: number) => {
+    navigate(`/feed/${id}`, { state: 'modal' });
+  }
+  
   return (
     <main className={classes.main}>
       <div className={classes.container}>
@@ -13,29 +39,41 @@ const FeedPageLayout = () => {
         </h1>
         <div className={classes.feedContainer}>
           <div className={classes.feedList}>
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
-            <FeedItem />
+            {feed?.orders.map((order) => {
+              const ingredients = order.ingredients.map((ingredientId) => ingredientsMap[ingredientId]);
+
+              return (
+                <FeedItem
+                  key={order._id} 
+                  number={order.number} 
+                  name={order.name}
+                  ingredients={ingredients}
+                  createdAt={order.createdAt}
+                  onClick={() => handleClick(order.number)}
+                />
+              )
+            })}
           </div>
           <div className={classes.feedInfo}>
             <div className={classes.feedInfoRow}>
               <div className={classes.feedInfoCell}>
                 <p className='text text_type_main-medium'>Готовы:</p>
                 <ul className={classes.feedInfoItems}>
-                  {doneItems.map((item) => {
-                    return <li key={item} style={{ color: '#00CCCC' }} className='text text_type_digits-default'>{item}</li>
-                  })}
+                  {
+                    doneOrders.map((item) => {
+                      return <li key={item._id} style={{ color: '#00CCCC' }} className='text text_type_digits-default'>{item.number}</li>
+                    })
+                  }
                 </ul>
               </div>
               <div className={classes.feedInfoCell}>
                 <p className='text text_type_main-medium'>В работе:</p>
                 <ul className={classes.feedInfoItems}>
-                  {inProgressItems.map((item) => {
-                    return <li key={item} className='text text_type_digits-default'>{item}</li>
-                  })}
+                  {
+                    inProgressOrders.map((item) => {
+                      return <li key={item._id} className='text text_type_digits-default'>{item.number}</li>
+                    })
+                  }
                 </ul>
               </div>
             </div>
@@ -43,7 +81,7 @@ const FeedPageLayout = () => {
               <div className={classes.feedInfoCell}>
                 <p className='text text_type_main-medium'>Выполнено за все время:</p>
                 <p className='text text_type_digits-large'>
-                  28 752
+                  {feed?.total}
                 </p>
               </div>
             </div>
@@ -51,7 +89,7 @@ const FeedPageLayout = () => {
               <div className={classes.feedInfoCell}>
                 <p className='text text_type_main-medium'>Выполнено за сегодня:</p>
                 <p className='text text_type_digits-large'>
-                  138
+                  {feed?.totalToday}
                 </p>
               </div>
             </div>

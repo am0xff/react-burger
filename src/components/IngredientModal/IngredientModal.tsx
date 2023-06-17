@@ -24,7 +24,11 @@ const IngredientModal = () => {
     }
   }, [id, items, success]);
 
-  return !!item ? (
+  if(!item) {
+    return null;
+  }
+
+  return (
     <Modal heading='Детали ингредиента' onClose={handleClose}>
       <div className={classes.modalBody}>
         <IngredientDetails
@@ -37,7 +41,7 @@ const IngredientModal = () => {
         />
       </div>
     </Modal>
-  ) : null
+  )
 }
 
 export default IngredientModal;

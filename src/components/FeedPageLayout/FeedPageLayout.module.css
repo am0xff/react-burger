@@ -41,10 +41,9 @@
 }
 
 .feedInfoItems {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
   margin: 24px 0 0 0;
   padding: 0;
   list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }

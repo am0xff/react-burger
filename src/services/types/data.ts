@@ -124,3 +124,21 @@ export type UpdateProfilePayload = {
   password: string
 }
 
+export type OrderStatus = 'created' | 'inprogress' | 'done';
+
+export type Order = {
+  _id: string,
+  name: string,
+  ingredients: string[],
+  status: OrderStatus,
+  number: number,
+  createdAt: string,
+  updatedAt: string
+}
+
+export type Feed = {
+  success: boolean,
+  orders: Order[],
+  total: number,
+  totalToday: number
+}

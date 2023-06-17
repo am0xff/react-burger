@@ -4,11 +4,11 @@ import classes from './OrderHistoryLayout.module.css';
 const OrderHistoryLayout = () => {
   return (
     <div className={classes.container}>
+      {/* <FeedItem />
       <FeedItem />
       <FeedItem />
       <FeedItem />
-      <FeedItem />
-      <FeedItem />
+      <FeedItem /> */}
     </div>
   )
 }

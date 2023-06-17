@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from '../../services/hooks';
 import { Ingredient } from '../../services/types/data';
+import Modal from '../Modal/Modal';
 import FeedInformation from '../FeedInformation/FeedInformation';
-import classes from './FeedInformationLayout.module.css';
 
-const FeedInformationLayout = () => {
+const FeedInformationModal = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { feed } = useSelector((state) => state.feed);
   const { items } = useSelector((state) => state.ingredients);
@@ -17,21 +18,28 @@ const FeedInformationLayout = () => {
 
   const ingredients = currentOrder?.ingredients.map((ingredient) => ingredientsMap && ingredientsMap[ingredient]) || [];
 
+  const handleClose = () => {
+    navigate('/feed');
+  }
+
+  if (!currentOrder) {
+    return null;
+  }
+  
   return (
-    <main className={classes.main}>
-      <div className={classes.container}>
-        {currentOrder && (
-          <FeedInformation 
-            status={currentOrder.status}
-            number={currentOrder.number}
-            ingredients={ingredients} 
-            name={currentOrder.name} 
-            createdAt={currentOrder.createdAt}
-          />
-        )}
+    <Modal heading={`#${currentOrder.number}`} onClose={handleClose}>
+      <div className='mt-2'>
+        <FeedInformation
+          status={currentOrder.status}
+          number={currentOrder.number}
+          ingredients={ingredients} 
+          name={currentOrder.name} 
+          createdAt={currentOrder.createdAt}
+          hideTitle
+        />
       </div>
-    </main>
+    </Modal>
   )
 }
 
-export default FeedInformationLayout;
+export default FeedInformationModal;

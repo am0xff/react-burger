@@ -8,6 +8,7 @@ import IngredientPage from './ingredient';
 import FeedPage from './feed';
 import OrdersPage from './orders';
 import FeedInformationPage from './feed-information';
+import OrderInformationPage from './order-information';
 import NotFound from './notFound';
 
 export { 
@@ -21,5 +22,6 @@ export {
   FeedPage,
   OrdersPage,
   FeedInformationPage,
+  OrderInformationPage,
   NotFound
 }

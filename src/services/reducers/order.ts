@@ -1,25 +1,25 @@
 import { 
-  FEED_CONNECTION_CLOSE,
-  FEED_CONNECTION_SUCCESS,
-  FEED_GET_MESSAGE,
-  FEED_CONNECTION_ERROR
+  ORDER_CONNECTION_CLOSE,
+  ORDER_CONNECTION_SUCCESS,
+  ORDER_GET_MESSAGE,
+  ORDER_CONNECTION_ERROR
 } from '../constants';
-import { TFeedActions } from '../actions';
+import { TOrderActions } from '../actions';
 import { Feed } from '../types/data';
 
-type FeedStore = {
+type OrderStore = {
   feed?: Feed,
   wsConnection: boolean,
   error?: Event
 }
 
-const initialStore: FeedStore = {
+const initialStore: OrderStore = {
   wsConnection: false
 }
 
-export const feedReducer = (state = initialStore, action: TFeedActions) => {
+export const orderReducer = (state = initialStore, action: TOrderActions) => {
   switch(action.type) {
-    case FEED_CONNECTION_CLOSE: {
+    case ORDER_CONNECTION_CLOSE: {
       return {
         ...state,
         feed: undefined,
@@ -27,21 +27,21 @@ export const feedReducer = (state = initialStore, action: TFeedActions) => {
       }
     }
 
-    case FEED_CONNECTION_SUCCESS: {
+    case ORDER_CONNECTION_SUCCESS: {
       return {
         ...state,
         wsConnection: true
       }  
     }
 
-    case FEED_GET_MESSAGE: {
+    case ORDER_GET_MESSAGE: {
       return {
         ...state,
         feed: action.payload
       }
     }
 
-    case FEED_CONNECTION_ERROR: {
+    case ORDER_CONNECTION_ERROR: {
       return {
         ...state,
         wsConnection: false,

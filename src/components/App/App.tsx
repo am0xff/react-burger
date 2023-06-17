@@ -10,6 +10,7 @@ import {
   OrdersPage,
   FeedPage,
   FeedInformationPage,
+  OrderInformationPage,
   NotFound
 } from '../../pages';
 import ProtectedRouteElement from '../ProtectedRouteElement/ProtectedRouteElement';
@@ -49,6 +50,7 @@ function App() {
         >
           <Route index element={<ProfileEdit />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="orders/:id" element={<OrderInformationPage />} />
         </Route>
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/:id" element={<FeedInformationPage />} />

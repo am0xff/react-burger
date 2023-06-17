@@ -20,7 +20,7 @@ export interface IResetOrderDetailsAction {
   readonly type: typeof RESET_ORDER_DETAILS;
 }
 
-export type TOrderActions = 
+export type TOrdersActions = 
   | ICreateOrderAction
   | ICreateOrderFailedAction
   | ICreateOrderSuccessAction

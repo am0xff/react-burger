@@ -5,7 +5,7 @@ import {
   CREATE_ORDER_FAILED,
   RESET_ORDER_DETAILS,
 } from '../constants';
-import { TOrderActions } from '../actions';
+import { TOrdersActions } from '../actions';
 
 export type OrderStore = {
   details: OrderDetails,
@@ -19,7 +19,7 @@ const initialState: OrderStore = {
   failed: false
 }
 
-export const ordersReducer = (state = initialState, action: TOrderActions) => {
+export const ordersReducer = (state = initialState, action: TOrdersActions) => {
   switch(action.type) {
     case CREATE_ORDER_REQUEST:
       return {

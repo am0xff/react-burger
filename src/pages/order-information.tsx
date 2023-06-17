@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useDispatch } from '../services/hooks';
 import { 
-  orderConnectionInitAction, 
+  orderConnectionInitAction,
   orderConnectionCloseAction,
   getIngredients
 } from '../services/actions';
-import OrdersLayout from '../components/OrdersLayout/OrdersLayout';
+import FeedInformationModal from '../components/FeedInformationModal/FeedInformationModal';
+import FeedInformationLayout from '../components/FeedInformationLayout/FeedInformationLayout';
 
-const OrderPage = () => {
+const OrderInformationPage = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const token = localStorage.getItem('token')?.split(' ')[1];
   
   useEffect(() => {
     if (token) {
-      console.log('token ', token);
-      
       dispatch(orderConnectionInitAction(token));
     }
 
@@ -27,8 +28,7 @@ const OrderPage = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-
-  return <OrdersLayout />
+  return location.state ? <FeedInformationModal backLink='/profile/orders' /> : <FeedInformationLayout />
 }
 
-export default OrderPage;
+export default OrderInformationPage;

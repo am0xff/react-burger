@@ -13,9 +13,6 @@ const FeedInformationPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   
-  console.log('location', location.state);
-  
-
   useEffect(() => {
     dispatch(feedConnectionInitAction());
 
@@ -28,7 +25,7 @@ const FeedInformationPage = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  return location.state ? <FeedInformationModal /> : <FeedInformationLayout />
+  return location.state ? <FeedInformationModal backLink='/feed' /> : <FeedInformationLayout />
 }
 
 export default FeedInformationPage;

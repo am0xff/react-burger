@@ -5,7 +5,11 @@ import { Ingredient } from '../../services/types/data';
 import Modal from '../Modal/Modal';
 import FeedInformation from '../FeedInformation/FeedInformation';
 
-const FeedInformationModal = () => {
+type Props = {
+  backLink: string
+}
+
+const FeedInformationModal = ({ backLink }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { feed } = useSelector((state) => state.feed);
@@ -19,7 +23,7 @@ const FeedInformationModal = () => {
   const ingredients = currentOrder?.ingredients.map((ingredient) => ingredientsMap && ingredientsMap[ingredient]) || [];
 
   const handleClose = () => {
-    navigate('/feed');
+    navigate(backLink);
   }
 
   if (!currentOrder) {

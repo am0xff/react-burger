@@ -19,7 +19,7 @@ const initialState: OrderStore = {
   failed: false
 }
 
-export const orderReducer = (state = initialState, action: TOrderActions) => {
+export const ordersReducer = (state = initialState, action: TOrderActions) => {
   switch(action.type) {
     case CREATE_ORDER_REQUEST:
       return {

@@ -7,7 +7,7 @@ import {
   ResetPasswordPage,
   ProfilePage,
   IngredientPage,
-  OrderHistoryPage,
+  OrdersPage,
   FeedPage,
   FeedInformationPage,
   NotFound
@@ -47,8 +47,8 @@ function App() {
           path="/profile"
           element={<ProtectedRouteElement element={<ProfilePage />} />}
         >
-          <Route index element={<ProfileEdit />}></Route>
-          <Route path="orders" element={<OrderHistoryPage />}></Route>
+          <Route index element={<ProfileEdit />} />
+          <Route path="orders" element={<OrdersPage />} />
         </Route>
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/:id" element={<FeedInformationPage />} />

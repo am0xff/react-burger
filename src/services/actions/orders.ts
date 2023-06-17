@@ -1,4 +1,4 @@
-import { createOrderApi } from '../../api/order';
+import { createOrderApi } from '../../api/orders';
 import { CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAILED, RESET_ORDER_DETAILS } from '../constants';
 import { OrderDetails } from '../types/data';
 import { AppThunk, AppDispatch } from '../types';

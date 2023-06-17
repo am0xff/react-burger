@@ -1,7 +1,7 @@
 import FeedItem from '../FeedItem/FeedItem';
-import classes from './OrderHistoryLayout.module.css';
+import classes from './OrdersLayout.module.css';
 
-const OrderHistoryLayout = () => {
+const OrdersLayout = () => {
   return (
     <div className={classes.container}>
       {/* <FeedItem />
@@ -13,4 +13,4 @@ const OrderHistoryLayout = () => {
   )
 }
 
-export default OrderHistoryLayout;
+export default OrdersLayout;

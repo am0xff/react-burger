@@ -17,8 +17,8 @@ const BurgerConstructor = () => {
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth);
   const { items: constructorItems } = useSelector((state) => state.burgerConstructor);
-  const { request: orderRequest } = useSelector((state) => state.order);
-  const { details: orderDetails } = useSelector((state) => state.order);
+  const { request: orderRequest } = useSelector((state) => state.orders);
+  const { details: orderDetails } = useSelector((state) => state.orders);
   const { items: ingredients } = useSelector((state) => state.ingredients);
 
   const { onClose } = useModal();

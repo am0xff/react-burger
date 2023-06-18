@@ -6,7 +6,7 @@ import useForm from '../../hooks/useForm';
 import classes from './ProfileEdit.module.css';
 
 const ProfileEdit = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const { user: initialValue, success } = useSelector((state) => state.auth);
   const { values, handleChange, setValues } = useForm({
     userName: '',

@@ -7,7 +7,7 @@ import { login } from '../../services/actions';
 import classes from './LoginLayout.module.css';
 
 const LoginLayout = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const { success } = useSelector((state) => state.auth);

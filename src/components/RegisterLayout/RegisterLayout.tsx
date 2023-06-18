@@ -12,7 +12,7 @@ import { register } from '../../services/actions';
 import classes from './RegisterLayout.module.css';
 
 const RegisterLayout = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { registerSuccess } = useSelector((state) => state.auth);
 

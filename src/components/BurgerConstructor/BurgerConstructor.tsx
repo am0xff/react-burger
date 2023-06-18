@@ -13,7 +13,7 @@ import BurgerConstructorDraggable from './BurgerConstructorDraggable';
 import classes from './BurgerConstructor.module.css';
 
 const BurgerConstructor = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth);
   const { items: constructorItems } = useSelector((state) => state.burgerConstructor);

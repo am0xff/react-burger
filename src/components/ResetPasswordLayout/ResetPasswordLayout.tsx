@@ -1,13 +1,13 @@
 import { useEffect, FormEvent } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Input, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useDispatch } from '../../services/hooks';
 import { createNewPassword } from '../../services/actions';
 import useForm from '../../hooks/useForm';
 import classes from './ResetPasswordLayout.module.css';
 
 const ResetPasswordLayout = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const { values, handleChange } = useForm({ password: '', token: '' });

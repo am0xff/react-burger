@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from '../../services/hooks';
 import classes from './ForgotPasswordLayout.module.css';
 
 const ForgotPasswordLayout = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { success } = useSelector((state) => state.auth);

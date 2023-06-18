@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 const defaultClassName = `text text_type_main-medium ${classes.sidebarLink}`;
 
 const ProfileSidebar = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { logoutSuccess } = useSelector((state) => state.auth);
 

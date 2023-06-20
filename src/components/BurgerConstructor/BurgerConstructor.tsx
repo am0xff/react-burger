@@ -110,7 +110,7 @@ const BurgerConstructor = () => {
           disabled={orderRequest || !constructorItems.length}
           onClick={handleCreateOrder}
         >
-          Нажми на меня
+          Оформить заказ
         </Button>
       </footer>
       {!!orderDetails.name && (

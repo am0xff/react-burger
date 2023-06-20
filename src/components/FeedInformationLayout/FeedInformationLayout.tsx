@@ -1,19 +1,26 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from '../../services/hooks';
-import { Ingredient } from '../../services/types/data';
+import { Feed, Ingredient } from '../../services/types/data';
 import FeedInformation from '../FeedInformation/FeedInformation';
 import classes from './FeedInformationLayout.module.css';
 
-const FeedInformationLayout = () => {
+type Props = {
+  data?: Feed
+}
+
+const FeedInformationLayout = ({ data }: Props) => {
   const { id } = useParams();
-  const { feed } = useSelector((state) => state.feed);
   const { items } = useSelector((state) => state.ingredients);
 
-  const currentOrder = feed?.orders.find(({ number }) => !!id && number === +id);
+  const currentOrder = data?.orders.find(({ number }) => !!id && number === +id);
   const ingredientsMap = useMemo(() => {
     return items.reduce((acc, cur) => ({...acc, [cur._id]: cur}), {} as Record<string, Ingredient>)
   }, [items]);
+
+  if (!currentOrder) {
+    return null;
+  }
 
   const ingredients = currentOrder?.ingredients.map((ingredient) => ingredientsMap && ingredientsMap[ingredient]) || [];
 

@@ -324,7 +324,7 @@ export function logout(): AppThunk {
   }
 }
 
-export function getToken(payload: { token?: string, callback: () => void }): AppThunk {
+export function getToken(payload: { token?: string, callback?: () => AppThunk }): AppThunk {
   return (dispatch: AppDispatch) => {
     dispatch(getTokenAction());
 
@@ -341,12 +341,14 @@ export function getToken(payload: { token?: string, callback: () => void }): App
       localStorage.setItem('refreshToken', data.refreshToken);
 
       dispatch(getTokenSuccessAction());
-      // TODO: Сработает ли это?
-      callback();
-      // dispatch(callback());
+
+      if(callback) {
+        dispatch(callback());
+      }
     })
-    .catch((err) => {      
+    .catch((err) => {
       dispatch(getTokenFailedAction());
+      localStorage.clear();
     });
   }
 }

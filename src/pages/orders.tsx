@@ -13,8 +13,6 @@ const OrderPage = () => {
   
   useEffect(() => {
     if (token) {
-      console.log('token ', token);
-      
       dispatch(orderConnectionInitAction(token));
     }
 

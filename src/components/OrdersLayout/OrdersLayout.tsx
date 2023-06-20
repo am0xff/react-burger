@@ -17,7 +17,7 @@ const OrdersLayout = () => {
   }, [items]);
 
   const handleClick = (id: number) => {
-    navigate(`/profile/orders/${id}`);
+    navigate(`/profile/orders/${id}`, { state: 'modal' });
   }
 
   return (

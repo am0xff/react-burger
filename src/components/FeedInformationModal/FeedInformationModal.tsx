@@ -1,26 +1,24 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from '../../services/hooks';
-import { Ingredient } from '../../services/types/data';
+import { Ingredient, Feed } from '../../services/types/data';
 import Modal from '../Modal/Modal';
 import FeedInformation from '../FeedInformation/FeedInformation';
 
 type Props = {
-  backLink: string
+  data?: Feed;
+  backLink: string;
 }
 
-const FeedInformationModal = ({ backLink }: Props) => {
+const FeedInformationModal = ({ backLink, data }: Props) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { feed } = useSelector((state) => state.feed);
   const { items } = useSelector((state) => state.ingredients);
 
-  const currentOrder = feed?.orders.find(({ number }) => !!id && number === +id);
+  const currentOrder = data?.orders.find(({ number }) => !!id && number === +id);
   const ingredientsMap = useMemo(() => {
     return items.reduce((acc, cur) => ({...acc, [cur._id]: cur}), {} as Record<string, Ingredient>)
   }, [items]);
-
-  const ingredients = currentOrder?.ingredients.map((ingredient) => ingredientsMap && ingredientsMap[ingredient]) || [];
 
   const handleClose = () => {
     navigate(backLink);
@@ -29,6 +27,8 @@ const FeedInformationModal = ({ backLink }: Props) => {
   if (!currentOrder) {
     return null;
   }
+
+  const ingredients = currentOrder.ingredients.map((ingredient) => ingredientsMap && ingredientsMap[ingredient]);
   
   return (
     <Modal heading={`#${currentOrder.number}`} onClose={handleClose}>

@@ -1,4 +1,5 @@
 import type { Middleware, MiddlewareAPI } from 'redux';
+import { getToken } from '../actions';
 import { AppDispatch, RootState, AppActions, TWSStoreActions } from '../types';
 
 export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
@@ -30,9 +31,22 @@ export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
+          const { message } = parsedData;
 
-          dispatch({ type: onMessage, payload: parsedData });
+          if (message && message === 'Invalid or missing token') {
+            const refreshToken = localStorage.getItem('refreshToken');
+
+            if (refreshToken) {
+              dispatch(getToken({ token: refreshToken }));
+            }
+          } else {
+            dispatch({ type: onMessage, payload: parsedData });
+          }
         };
+      }
+
+      if (action.type === onClose && socket) {
+        socket.close();
       }
 
       next(action);

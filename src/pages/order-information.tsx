@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from '../services/hooks';
+import { useSelector, useDispatch } from '../services/hooks';
 import { 
   orderConnectionInitAction,
   orderConnectionCloseAction,
@@ -13,6 +13,7 @@ const OrderInformationPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const token = localStorage.getItem('token')?.split(' ')[1];
+  const { feed } = useSelector((state) => state.order);
   
   useEffect(() => {
     if (token) {
@@ -28,7 +29,7 @@ const OrderInformationPage = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  return location.state ? <FeedInformationModal backLink='/profile/orders' /> : <FeedInformationLayout />
+  return location.state ? <FeedInformationModal backLink='/profile/orders' data={feed} /> : <FeedInformationLayout data={feed} />
 }
 
 export default OrderInformationPage;

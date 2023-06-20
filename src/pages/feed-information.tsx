@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from '../services/hooks';
+import { useDispatch, useSelector } from '../services/hooks';
 import { 
   feedConnectionInitAction, 
   feedConnectionCloseAction,
@@ -12,20 +12,18 @@ import FeedInformationLayout from '../components/FeedInformationLayout/FeedInfor
 const FeedInformationPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { feed } = useSelector((state) => state.feed);
   
   useEffect(() => {
     dispatch(feedConnectionInitAction());
+    dispatch(getIngredients());
 
     return () => {
       dispatch(feedConnectionCloseAction());
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
-  return location.state ? <FeedInformationModal backLink='/feed' /> : <FeedInformationLayout />
+  return location.state ? <FeedInformationModal backLink='/feed' data={feed} /> : <FeedInformationLayout data={feed} />
 }
 
 export default FeedInformationPage;

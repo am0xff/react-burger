@@ -124,7 +124,7 @@ export type UpdateProfilePayload = {
   password: string
 }
 
-export type OrderStatus = 'created' | 'inprogress' | 'done';
+export type OrderStatus = 'created' | 'pending' | 'done';
 
 export type Order = {
   _id: string,

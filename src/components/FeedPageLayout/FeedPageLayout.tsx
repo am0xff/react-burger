@@ -23,8 +23,8 @@ const FeedPageLayout = () => {
     return feed?.orders.filter((order, index) => index < MAX_ORDERS_LIST_SIZE && order.status === 'done') || []
   }, [feed?.orders]);
 
-  const inProgressOrders = useMemo(() => {
-    return feed?.orders.filter((order, index) => index < MAX_ORDERS_LIST_SIZE && order.status === 'inprogress') || []
+  const pendingOrders = useMemo(() => {
+    return feed?.orders.filter((order, index) => index < MAX_ORDERS_LIST_SIZE && order.status === 'pending') || []
   }, [feed?.orders]);
 
   const handleClick = (id: number) => {
@@ -70,7 +70,7 @@ const FeedPageLayout = () => {
                 <p className='text text_type_main-medium'>В работе:</p>
                 <ul className={classes.feedInfoItems}>
                   {
-                    inProgressOrders.map((item) => {
+                    pendingOrders.map((item) => {
                       return <li key={item._id} className='text text_type_digits-default'>{item.number}</li>
                     })
                   }

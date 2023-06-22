@@ -24,10 +24,12 @@ import {
   UPDATE_PROFILE_REQUEST,
   UPDATE_PROFILE_SUCCESS,
   UPDATE_PROFILE_FAILED,
-} from '../actions/user';
+} from '../constants';
+import { User } from '../types/data';
+import { TUserActions } from '../actions';
 
 export type AuthStore = {
-  user?: { email: string, name: string, password: string },
+  user: User,
   request: boolean,
   success: boolean,
   failed: boolean,
@@ -35,10 +37,8 @@ export type AuthStore = {
   registerSuccess: boolean
 }
 
-type Action = { type: string, payload: unknown };
-
 const initialState: AuthStore = {
-  user: undefined,
+  user: {} as User,
   request: false,
   success: false,
   failed: false,
@@ -46,7 +46,7 @@ const initialState: AuthStore = {
   registerSuccess: false
 }
 
-export const userReducer = (state = initialState, action: Action) => {
+export const userReducer = (state = initialState, action: TUserActions) => {
   switch(action.type) {
     case REGISTER_REQUEST:
     case LOGIN_REQUEST:

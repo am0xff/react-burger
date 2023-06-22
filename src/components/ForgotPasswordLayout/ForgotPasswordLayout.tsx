@@ -1,17 +1,16 @@
 import { useEffect, FormEvent } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import useForm from '../../hooks/useForm';
-import { getCodeForReset } from '../../services/actions/user';
-import { AuthStore } from '../../services/reducers/user';
+import { getCodeForReset } from '../../services/actions';
+import { useSelector, useDispatch } from '../../services/hooks';
 import classes from './ForgotPasswordLayout.module.css';
 
 const ForgotPasswordLayout = () => {
-  const dispatch: any = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { success } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+  const { success } = useSelector((state) => state.auth);
   const { values, handleChange } = useForm({ email: '' })
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

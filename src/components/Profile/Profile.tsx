@@ -14,7 +14,7 @@ const Profile = ({ children }: Props) => {
         <div className={classes.mainLayout}>
           <ProfileSidebar />
 
-          <div className='ml-15'>
+          <div className={classes.mainContent}>
             {children}
           </div>
         </div>

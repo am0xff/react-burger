@@ -1,22 +1,77 @@
-import { createOrderApi } from '../api/order';
+import { 
+  ORDER_CONNECTION_INIT,
+  ORDER_CONNECTION_CLOSE,
+  ORDER_CONNECTION_SUCCESS,
+  ORDER_GET_MESSAGE,
+  ORDER_CONNECTION_ERROR
+} from '../constants';
+import { Feed } from '../types/data';
 
-export const CREATE_ORDER_REQUEST = 'CREATE_ORDER_REQUEST';
-export const CREATE_ORDER_SUCCESS = 'CREATE_ORDER_SUCCESS';
-export const CREATE_ORDER_FAILED = 'CREATE_ORDER_FAILED';
-export const DELETE_ORDER_DETAILS = 'DELETE_ORDER_DETAILS';
-export const OPEN_ORDER_MODAL = 'OPEN_ORDER_MODAL';
-export const CLOSE_ORDER_MODAL = 'CLOSE_ORDER_MODAL';
+export interface IOrderConnectionInitAction {
+  readonly type: typeof ORDER_CONNECTION_INIT;
+  readonly payload: string;
+}
 
-export const createOrder = (payload: string[]) => {
-  return (dispatch: any) => {
-    dispatch({ type: CREATE_ORDER_REQUEST });
+export interface IOrderConnectionCloseAction {
+  readonly type: typeof ORDER_CONNECTION_CLOSE;
+}
 
-    createOrderApi(payload)
-    .then(data => {
-      dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
-    })
-    .catch(() => {
-      dispatch({ type: CREATE_ORDER_FAILED });
-    });
-  }
+export interface IOrderConnectionSuccessAction {
+  readonly type: typeof ORDER_CONNECTION_SUCCESS;
+}
+
+export interface IOrderConnectionErrorAction {
+  readonly type: typeof ORDER_CONNECTION_ERROR;
+  readonly payload: Event
+}
+
+export interface IOrderGetMessageAction {
+  readonly type: typeof ORDER_GET_MESSAGE;
+  readonly payload: Feed
+}
+
+export type TOrderActions = 
+  | IOrderConnectionInitAction
+  | IOrderConnectionCloseAction
+  | IOrderConnectionSuccessAction
+  | IOrderConnectionErrorAction
+  | IOrderGetMessageAction;
+
+export const orderConnectionInitAction = (token: string): IOrderConnectionInitAction => ({
+  type: ORDER_CONNECTION_INIT,
+  payload: `wss://norma.nomoreparties.space/orders?token=${token}`
+});
+
+export const orderConnectionCloseAction = (): IOrderConnectionCloseAction => ({
+  type: ORDER_CONNECTION_CLOSE
+});
+
+export const orderConnectionSuccessAction = (): IOrderConnectionSuccessAction => ({
+  type: ORDER_CONNECTION_SUCCESS
+});
+
+export const orderGetMessageAction = (payload: Feed): IOrderGetMessageAction => ({
+  type: ORDER_GET_MESSAGE,
+  payload
+});
+
+export const orderConnectionError = (payload: Event): IOrderConnectionErrorAction => ({
+  type: ORDER_CONNECTION_ERROR,
+  payload
+});
+
+export type TWSOrderActions = {
+  wsInit: typeof ORDER_CONNECTION_INIT,
+  onOpen: typeof ORDER_CONNECTION_SUCCESS,
+  onClose: typeof ORDER_CONNECTION_CLOSE,
+  onError: typeof ORDER_CONNECTION_ERROR,
+  onMessage: typeof ORDER_GET_MESSAGE
+}
+
+export const wsOrderActions: TWSOrderActions = {
+  wsInit: ORDER_CONNECTION_INIT,
+  onOpen: ORDER_CONNECTION_SUCCESS,
+  onClose: ORDER_CONNECTION_CLOSE,
+  onError: ORDER_CONNECTION_ERROR,
+  onMessage: ORDER_GET_MESSAGE
 }

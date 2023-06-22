@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { IngredientsStore } from '../../services/reducers/ingredients';
-import { Ingredient } from '../../services/api/types';
+import { useSelector } from '../../services/hooks';
+import { Ingredient } from '../../services/types/data';
 import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import classes from './IngredientLayout.module.css';
 
 const IngredientLayout = () => {
   const { id } = useParams();
-  const { items, success } = useSelector<{ ingredients: IngredientsStore }, IngredientsStore>((state) => state.ingredients);
+  const { items, success } = useSelector((state) => state.ingredients);
   const [item, setItem] = useState<Ingredient | undefined>();
 
   useEffect(() => {

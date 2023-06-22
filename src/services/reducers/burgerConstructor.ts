@@ -1,27 +1,19 @@
-import { Ingredient } from '../api/types';
-import { 
-  ADD_ITEM,
-  DELETE_ITEM,
-  CHANGE_ORDER,
-  RESET
-} from '../actions/burgerConstructor';
-
-export type ConstructorItem = Ingredient & { uniqueId: string };
+import { Ingredient } from '../types/data';
+import { TBurgerConstructorActions } from '../actions'
+import { ADD_ITEM, DELETE_ITEM, CHANGE_ORDER, RESET } from '../constants';
 
 export type BurgerConstructorStore = {
-  items: ConstructorItem[]
+  items: ReadonlyArray<Ingredient & { uniqueId: string }>
 }
-
-type Action = { type: string, payload: unknown }
 
 const initialState: BurgerConstructorStore = {
   items: []
 }
 
-export const burgerConstructorReducer = (state = initialState, action: Action) => {
+export const burgerConstructorReducer = (state = initialState, action: TBurgerConstructorActions) => {
   switch(action.type) {
     case ADD_ITEM: {
-      const ingredient = action.payload as Ingredient;
+      const ingredient = action.payload;
       const isBun = ingredient.type === 'bun';
 
       const itemsTemp = [...state.items].filter(({ type }) => isBun ? type !== 'bun' : true);
@@ -53,7 +45,7 @@ export const burgerConstructorReducer = (state = initialState, action: Action) =
       }
     }
     case CHANGE_ORDER: {
-      const { dragIndex, hoverIndex } = action.payload as { dragIndex: number, hoverIndex: number };
+      const { dragIndex, hoverIndex } = action.payload;
 
       const bun = state.items.find(({ type }) => type === 'bun');
       const itemsWithoutBun = state.items.filter(({ type }) => type !== 'bun');

@@ -1,6 +1,6 @@
 import { useDrag } from 'react-dnd'
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { Ingredient } from '../../services/api/types';
+import { Ingredient } from '../../services/types/data';
 import classes from './BurgerIngredients.module.css';
 
 type Props = {

@@ -1,64 +1,55 @@
-import { OrderDetails } from '../api/types';
 import { 
-  CREATE_ORDER_REQUEST,
-  CREATE_ORDER_SUCCESS,
-  CREATE_ORDER_FAILED,
-  DELETE_ORDER_DETAILS,
-  OPEN_ORDER_MODAL,
-  CLOSE_ORDER_MODAL
-} from '../actions/order';
+  ORDER_CONNECTION_CLOSE,
+  ORDER_CONNECTION_SUCCESS,
+  ORDER_GET_MESSAGE,
+  ORDER_CONNECTION_ERROR
+} from '../constants';
+import { TOrderActions } from '../actions';
+import { Feed } from '../types/data';
 
-export type OrderStore = {
-  details: OrderDetails | undefined,
-  request: boolean,
-  failed: boolean
+type OrderStore = {
+  feed?: Feed,
+  wsConnection: boolean,
+  error?: Event
 }
 
-type Action = { type: string; payload: OrderDetails };
-
-const initialState: OrderStore = {
-  details: undefined,
-  request: false,
-  failed: false
+const initialStore: OrderStore = {
+  wsConnection: false
 }
 
-export const orderReducer = (state = initialState, action: Action) => {
+export const orderReducer = (state = initialStore, action: TOrderActions) => {
   switch(action.type) {
-    case CREATE_ORDER_REQUEST:
+    case ORDER_CONNECTION_CLOSE: {
       return {
         ...state,
-        request: true,
-        failed: false
+        feed: undefined,
+        wsConnection: false
       }
-    case CREATE_ORDER_SUCCESS:
+    }
+
+    case ORDER_CONNECTION_SUCCESS: {
       return {
         ...state,
-        request: false,
-        failed: false,
-        details: action.payload
-      }
-    case CREATE_ORDER_FAILED:
+        wsConnection: true
+      }  
+    }
+
+    case ORDER_GET_MESSAGE: {
       return {
         ...state,
-        request: false,
-        failed: true
+        feed: action.payload
       }
-    case DELETE_ORDER_DETAILS:
+    }
+
+    case ORDER_CONNECTION_ERROR: {
       return {
         ...state,
-        details: null
+        wsConnection: false,
+        error: action.payload
       }
-    case OPEN_ORDER_MODAL:
-      return {
-        ...state,
-        modalOrder: true
-      }
-    case CLOSE_ORDER_MODAL:
-      return {
-        ...state,
-        modalOrder: false
-      }
+    }
+
     default:
-      return state
+      return state;
   }
 }

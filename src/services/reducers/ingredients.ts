@@ -1,18 +1,17 @@
-import { Ingredient } from '../api/types';
 import { 
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED
-} from '../actions/ingredients';
+} from '../constants';
+import { TGetIngredientsActions } from '../actions'
+import { Ingredient } from '../types/data';
 
 export type IngredientsStore = {
-  items: Ingredient[],
+  items: ReadonlyArray<Ingredient>,
   request: boolean,
   failed: boolean,
   success: boolean
 }
-
-type Action = { type: string; payload: unknown };
 
 const initialState: IngredientsStore = {
   items: [],
@@ -21,7 +20,7 @@ const initialState: IngredientsStore = {
   success: false
 }
 
-export const ingredientsReducer = (state = initialState, action: Action) => {
+export const ingredientsReducer = (state = initialState, action: TGetIngredientsActions) => {
   switch(action.type) {
     case GET_INGREDIENTS_REQUEST:
       return {

@@ -10,7 +10,7 @@ const AppHeader = () => {
         <div className={classes.headerInner}>
           <nav className={`${classes.nav} pb-4 pt-4`}>
             <AppHeaderLink url={'/'} icon={'burger'} text={'Конструктор'} />
-            <AppHeaderLink url={'/404'} icon={'list'} text={'Лента заказов'} />
+            <AppHeaderLink url={'/feed'} icon={'list'} text={'Лента заказов'} />
           </nav>
           <div className={classes.logo}>
             <Link to="/">

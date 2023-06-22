@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { useDispatch } from 'react-redux';
 import { ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
-import { DELETE_ITEM } from '../../services/actions/burgerConstructor';
+import { useDispatch } from '../../services/hooks';
+import { deleteItemAction } from '../../services/actions';
 import classes from './BurgerConstructor.module.css';
 
 type Props = {
@@ -86,7 +86,7 @@ const BurgerConstructorIngredient = ({
 
   const handleDelete = (id?: string) => {
     if (id) {
-      dispatch({ type: DELETE_ITEM, payload: id });
+      dispatch(deleteItemAction(id));
     }
   };
 

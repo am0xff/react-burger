@@ -1,14 +1,13 @@
 import { useEffect, useMemo, FormEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Input, Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { AuthStore } from '../../services/reducers/user';
+import { getUser, updateProfile } from '../../services/actions';
+import { useDispatch, useSelector } from '../../services/hooks';
 import useForm from '../../hooks/useForm';
 import classes from './ProfileEdit.module.css';
-import { getUser, updateProfile } from '../../services/actions/user';
 
 const ProfileEdit = () => {
-  const dispatch: any = useDispatch();
-  const { user: initialValue, success } = useSelector<{ auth: AuthStore }, AuthStore>((state) => state.auth);
+  const dispatch = useDispatch();
+  const { user: initialValue, success } = useSelector((state) => state.auth);
   const { values, handleChange, setValues } = useForm({
     userName: '',
     email: '',
@@ -29,7 +28,8 @@ const ProfileEdit = () => {
 
   const handleClear = () => {
     if (initialValue) {
-      const { name, email, password } = initialValue;
+      // TODO: password = empty Check it!
+      const { name, email, password = '' } = initialValue;
       
       setValues({
         userName: name,
@@ -45,7 +45,8 @@ const ProfileEdit = () => {
 
   useEffect(() => {
     if (success && initialValue) {
-      const { name, email, password } = initialValue;
+      // TODO: password = empty Check it!
+      const { name, email, password = '' } = initialValue;
 
       setValues({
         userName: name,

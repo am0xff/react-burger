@@ -1,4 +1,4 @@
-import { IngredientDetails as IngredientDetailsType } from '../../services/api/types';
+import { IngredientDetails as IngredientDetailsType } from '../../services/types/data';
 import IngredientDetailsInfoCard from './IngredientDetailsInfoCard';
 import classes from './IngredientDetails.module.css';
 

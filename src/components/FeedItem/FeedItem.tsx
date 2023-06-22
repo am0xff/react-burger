@@ -12,7 +12,7 @@ type Props = Omit<Order, '_id' | 'ingredients' | 'status' | 'createdAt' | 'updat
 
 const statusLabel: Record<OrderStatus, string> = {
   created: 'Создан',
-  inprogress: 'Готовится',
+  pending: 'Готовится',
   done: 'Выполнен',
 };
 

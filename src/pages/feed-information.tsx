@@ -16,11 +16,14 @@ const FeedInformationPage = () => {
   
   useEffect(() => {
     dispatch(feedConnectionInitAction());
-    dispatch(getIngredients());
 
     return () => {
       dispatch(feedConnectionCloseAction());
     }
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getIngredients());
   }, [dispatch]);
 
   return location.state ? <FeedInformationModal backLink='/feed' data={feed} /> : <FeedInformationLayout data={feed} />

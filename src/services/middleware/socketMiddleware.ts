@@ -32,7 +32,7 @@ export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
           const { data } = event;
           const parsedData = JSON.parse(data);
           const { message } = parsedData;
-
+          
           if (message && message === 'Invalid or missing token') {
             const refreshToken = localStorage.getItem('refreshToken');
 
@@ -43,10 +43,11 @@ export const socketMiddleware = (wsActions: TWSStoreActions): Middleware => {
             dispatch({ type: onMessage, payload: parsedData });
           }
         };
-      }
 
-      if (action.type === onClose && socket) {
-        socket.close();
+        if (action.type === onClose && socket.readyState === 1) {
+          socket.close();
+          socket = null;
+        }
       }
 
       next(action);

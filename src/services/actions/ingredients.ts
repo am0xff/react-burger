@@ -1,7 +1,7 @@
 import { getIngredientsApi } from '../../api/ingredients';
 import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED } from '../constants';
 import { Ingredient } from '../types/data';
-import { AppThunk, AppDispatch } from '../types';
+import { AppDispatch } from '../types';
 
 export interface IGetIngredientsAction {
   readonly type: typeof GET_INGREDIENTS_REQUEST;
@@ -34,15 +34,15 @@ export const getIngredientsSuccessAction = (payload: ReadonlyArray<Ingredient>) 
   payload
 })
 
-export const getIngredients = (): AppThunk => {
+export const getIngredients = () => {
   return (dispatch: AppDispatch) => {
     dispatch(getIngredientsAction());
-    getIngredientsApi()
-    .then(({ data }) => {
-      dispatch(getIngredientsSuccessAction(data));
-    })
-    .catch(() => {
-      dispatch(getIngredientsFailedAction());
-    })
+    return getIngredientsApi()
+      .then(({ data }) => {
+        dispatch(getIngredientsSuccessAction(data));
+      })
+      .catch(() => {
+        dispatch(getIngredientsFailedAction());
+      });
   };
 }

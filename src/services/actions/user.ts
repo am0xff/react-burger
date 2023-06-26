@@ -273,58 +273,58 @@ export const updateProfileSuccessAction = (): IUpdateProfileSuccessAction => ({
   type: UPDATE_PROFILE_SUCCESS
 });
 
-export function register(payload: RegisterPayload): AppThunk {
+export function register(payload: RegisterPayload) {
   return (dispatch: AppDispatch) => {
     dispatch(registerAction());
 
-    registerApi(payload)
-    .then(() => {
-      dispatch(registerSuccessAction());
-    })
-    .catch(() => {
-      dispatch(registerFailedAction());
-    });
+    return registerApi(payload)
+      .then(() => {
+        dispatch(registerSuccessAction());
+      })
+      .catch(() => {
+        dispatch(registerFailedAction());
+      });
   }
 }
 
-export function login(payload: LoginPayload): AppThunk {
+export function login(payload: LoginPayload) {
   return (dispatch: AppDispatch) => {
     dispatch(loginAction());
 
-    loginApi(payload)
-    .then((data) => {
-      // SAVE TOKEN
-      localStorage.setItem('token', data.accessToken);
-      
-      // SAVE REFRESH_TOKEN
-      localStorage.setItem('refreshToken', data.refreshToken);
+    return loginApi(payload)
+      .then((data) => {
+        // SAVE TOKEN
+        localStorage.setItem('token', data.accessToken);
+        
+        // SAVE REFRESH_TOKEN
+        localStorage.setItem('refreshToken', data.refreshToken);
 
-      dispatch(setUserAction(data.user))
+        dispatch(setUserAction(data.user))
 
-      dispatch(loginSuccessAction());
-    })
-    .catch(() => {
-      dispatch(loginFailedAction());
-    });
+        dispatch(loginSuccessAction());
+      })
+      .catch(() => {
+        dispatch(loginFailedAction());
+      });
   }
 }
 
-export function logout(): AppThunk {
+export function logout() {
   return (dispatch: AppDispatch) => {
     dispatch(logoutAction());
 
-    logoutApi()
-    .then(() => {
-      dispatch(logoutSuccessAction());
-      localStorage.clear();
-    })
-    .catch(() => {
-      dispatch(logoutFailedAction());
-    });
+    return logoutApi()
+      .then(() => {
+        dispatch(logoutSuccessAction());
+        localStorage.clear();
+      })
+      .catch(() => {
+        dispatch(logoutFailedAction());
+      });
   }
 }
 
-export function getToken(payload: { token?: string, callback?: () => AppThunk }): AppThunk {
+export function getToken(payload: { token?: string, callback?: () => AppThunk }) {
   return (dispatch: AppDispatch) => {
     dispatch(getTokenAction());
 
@@ -332,95 +332,95 @@ export function getToken(payload: { token?: string, callback?: () => AppThunk })
 
     if(!token) return;
 
-    getTokenApi(token)
-    .then((data) => {
-      // SAVE TOKEN
-      localStorage.setItem('token', data.accessToken);
-      
-      // SAVE REFRESH_TOKEN
-      localStorage.setItem('refreshToken', data.refreshToken);
+    return getTokenApi(token)
+      .then((data) => {
+        // SAVE TOKEN
+        localStorage.setItem('token', data.accessToken);
+        
+        // SAVE REFRESH_TOKEN
+        localStorage.setItem('refreshToken', data.refreshToken);
 
-      dispatch(getTokenSuccessAction());
+        dispatch(getTokenSuccessAction());
 
-      if(callback) {
-        dispatch(callback());
-      }
-    })
-    .catch((err) => {
-      dispatch(getTokenFailedAction());
-      localStorage.clear();
-    });
+        if(callback) {
+          dispatch(callback());
+        }
+      })
+      .catch((err) => {
+        dispatch(getTokenFailedAction());
+        localStorage.clear();
+      });
   }
 }
 
-export function getCodeForReset({ email }: { email: string }): AppThunk {
+export function getCodeForReset({ email }: { email: string }) {
   return (dispatch: AppDispatch) => {
     dispatch(getCodeAction());
 
-    getCodeForResetApi(email)
-    .then(() => {
-      dispatch(getCodeSuccessAction());
-    })
-    .catch(() => {
-      dispatch(getCodeFailedAction());
-    });
+    return getCodeForResetApi(email)
+      .then(() => {
+        dispatch(getCodeSuccessAction());
+      })
+      .catch(() => {
+        dispatch(getCodeFailedAction());
+      });
   }
 }
 
-export function createNewPassword(payload: CreateNewPasswordPayload): AppThunk {
+export function createNewPassword(payload: CreateNewPasswordPayload) {
   return (dispatch: AppDispatch) => {
     dispatch(createPasswordAction());
 
-    createNewPasswordApi(payload)
-    .then(() => {
-      dispatch(createPasswordSuccessAction());
-    })
-    .catch(() => {
-      dispatch(createPasswordFailedAction());
-    });
+    return createNewPasswordApi(payload)
+      .then(() => {
+        dispatch(createPasswordSuccessAction());
+      })
+      .catch(() => {
+        dispatch(createPasswordFailedAction());
+      });
   }
 }
 
-export function getUser(): AppThunk {
+export function getUser() {
   return (dispatch: AppDispatch) => {
     const refreshToken = localStorage.getItem('refreshToken') || '';
 
     dispatch(getUserAction());
 
-    getUserApi()
-    .then((data) => {
-      // TODO: Заменить setUserAction(payload) на getUserSuccessAction(payload)
-      dispatch(getUserSuccessAction());
-      dispatch(setUserAction(data.user));
-    })
-    .catch((err) => {
-      if (err.status === 403) {
-        dispatch(getToken({ token: refreshToken, callback: () => getUser() }));
-      } else {
-        dispatch(getUserFailedAction());
-      }
-    });
+    return getUserApi()
+      .then((data) => {
+        // TODO: Заменить setUserAction(payload) на getUserSuccessAction(payload)
+        dispatch(getUserSuccessAction());
+        dispatch(setUserAction(data.user));
+      })
+      .catch((err) => {
+        if (err.status === 403) {
+          dispatch(getToken({ token: refreshToken, callback: () => getUser() }));
+        } else {
+          dispatch(getUserFailedAction());
+        }
+      });
   }
 }
 
-export function updateProfile(payload: UpdateProfilePayload): AppThunk {
+export function updateProfile(payload: UpdateProfilePayload) {
   return (dispatch: AppDispatch) => {
     const refreshToken = localStorage.getItem('refreshToken') || '';
 
     dispatch(updateProfileAction());
 
-    updateProfileApi(payload)
-    .then((data) => {
-      // TODO: Заменить setUserAction(payload) на updateProfileSuccessAction(payload)
-      dispatch(updateProfileSuccessAction());
-      dispatch(setUserAction(data.user));
-    })
-    .catch((err) => {
-      if (err.status === 403) {
-        dispatch(getToken({ token: refreshToken, callback: () => updateProfile(payload) }));
-      } else {
-        dispatch(updateProfileFailedAction());
-      }
-    });
+    return updateProfileApi(payload)
+      .then((data) => {
+        // TODO: Заменить setUserAction(payload) на updateProfileSuccessAction(payload)
+        dispatch(updateProfileSuccessAction());
+        dispatch(setUserAction(data.user));
+      })
+      .catch((err) => {
+        if (err.status === 403) {
+          dispatch(getToken({ token: refreshToken, callback: () => updateProfile(payload) }));
+        } else {
+          dispatch(updateProfileFailedAction());
+        }
+      });
   }
 }

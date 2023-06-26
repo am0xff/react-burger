@@ -43,16 +43,16 @@ export const resetOrderDetailsAction = (): IResetOrderDetailsAction => ({
   type: RESET_ORDER_DETAILS
 });
 
-export const createOrder = (payload: string[]): AppThunk => {
+export const createOrder = (payload: string[]) => {
   return (dispatch: AppDispatch) => {
     dispatch(createOrderAction());
 
-    createOrderApi(payload)
-    .then((data) => {
-      dispatch(createOrderSuccessAction(data));
-    })
-    .catch(() => {
-      dispatch(createOrderFailedAction());
-    });
+    return createOrderApi(payload)
+      .then((data) => {
+        dispatch(createOrderSuccessAction(data));
+      })
+      .catch(() => {
+        dispatch(createOrderFailedAction());
+      });
   }
 }

@@ -1,5 +1,6 @@
 import * as actions from './';
 import * as types from '../constants';
+import { Ingredient } from '../types/data';
 
 describe('Actions burgerConstructor', () => {
   it('should create an action addItemAction with correct data', () => {
@@ -17,9 +18,8 @@ describe('Actions burgerConstructor', () => {
       image_mobile: 'https://image.png',
       image_large: 'https://image.png',
       uniqueId: '1'
-    };
+    } as Ingredient & { uniqueId: string };
 
-    // @ts-ignore
     expect(actions.addItemAction(payload)).toEqual({
       type: types.ADD_ITEM,
       payload

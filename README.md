@@ -1,4 +1,4 @@
-Link on project https://am0xff.github.io/
+Link on project https://am0xff.github.io/react-burger
 
 # Getting Started with Create React App
 

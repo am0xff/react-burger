@@ -37,6 +37,7 @@ export const orderReducer = (state = initialStore, action: TOrderActions) => {
     case ORDER_GET_MESSAGE: {
       return {
         ...state,
+        wsConnection: true,
         feed: action.payload
       }
     }

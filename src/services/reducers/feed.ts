@@ -22,7 +22,6 @@ export const feedReducer = (state = initialStore, action: TFeedActions) => {
     case FEED_CONNECTION_CLOSE: {
       return {
         ...state,
-        feed: undefined,
         wsConnection: false
       }
     }
@@ -37,6 +36,7 @@ export const feedReducer = (state = initialStore, action: TFeedActions) => {
     case FEED_GET_MESSAGE: {
       return {
         ...state,
+        wsConnection: true,
         feed: action.payload
       }
     }
